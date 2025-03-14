@@ -1,0 +1,9 @@
+[package]
+name    = "order_service"
+version = "0.0.0"
+edition = "2024"
+
+[dependencies]
+actix-web = "4.0"
+sqlx      = { version = "0.8.3", features = ["sqlite", "runtime-tokio"] }
+chrono    = "0.4.40"
