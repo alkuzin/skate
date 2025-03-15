@@ -57,11 +57,32 @@ impl OrderStatus {
     pub fn as_str(&self) -> &str {
         match self {
             OrderStatus::Processing => "В обработке",
-            OrderStatus::Accepted   => "Принят",
-            OrderStatus::Assembly   => "В сборке",
+            OrderStatus::Accepted => "Принят",
+            OrderStatus::Assembly => "В сборке",
             OrderStatus::InProgress => "В доставке",
-            OrderStatus::Completed  => "Завершен",
-            OrderStatus::Cancelled  => "Отменен",
+            OrderStatus::Completed => "Завершен",
+            OrderStatus::Cancelled => "Отменен",
+        }
+    }
+}
+
+impl From<&str> for OrderStatus {
+    /// Convert string slice to order status.
+    ///
+    /// # Parameters
+    /// - `value` - given string slice to convert.
+    ///
+    /// # Returns
+    /// Order status enumeration representation of given value.
+    fn from(value: &str) -> Self {
+        match value {
+             "В обработке" => OrderStatus::Processing,
+             "Принят"      => OrderStatus::Accepted,
+             "В сборке"    => OrderStatus::Assembly,
+             "В доставке"  => OrderStatus::InProgress,
+             "Завершен"    => OrderStatus::Completed,
+             "Отменен"     => OrderStatus::Cancelled,
+            _              => OrderStatus::Cancelled,
         }
     }
 }
