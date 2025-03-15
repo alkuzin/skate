@@ -16,19 +16,11 @@
 
 //! Order repository declaration.
 
-// class "OrderRepository" {
-//     +findById(id: int): Order
-//     +save(order: Order): void
-//     +update(order: Order): void
-//     +delete(order: Order): void
-// TODO:
-//     +findAllByCustomerId(customer_id: int): List<Order>
-//     +findAllByStatus(status: OrderStatus): List<Order>
-//     +getOrderDetails(order_id: int): OrderDTO;
-// }
-
+use std::{collections::LinkedList, error::Error};
+use chrono::{DateTime, NaiveDateTime, Utc};
+use crate::dto::{OrderDTO, ProductItemDTO};
+use crate::order::{Order, OrderStatus};
 use sqlx::sqlite::SqlitePool;
-use crate::order::Order;
 
 /// Struct for communicating with database.
 pub struct OrderRepository<'a> {
@@ -55,7 +47,9 @@ impl<'a> OrderRepository<'a> {
                 address TEXT NOT NULL,
                 total_amount REAL NOT NULL,
                 payment_method TEXT NOT NULL,
-                products TEXT NOT NULL
+                products TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
             )
             "#;
 
@@ -103,9 +97,11 @@ impl<'a> OrderRepository<'a> {
         let query =
             r#"
             INSERT INTO Orders (customer_id, status, address, total_amount,
-            payment_method, products)
-            VALUES (?, ?, ?, ?, ?, ?)
+            payment_method, products, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             "#;
+
+        let current_time = Utc::now().to_rfc3339();
 
         // Insert the new order into the database.
         sqlx::query(query)
@@ -115,6 +111,8 @@ impl<'a> OrderRepository<'a> {
         .bind(&order.total_amount)
         .bind(&order.payment_method)
         .bind(&order.products)
+        .bind(&current_time)
+        .bind(&current_time)
         .execute(self.pool)
         .await?;
 
@@ -183,5 +181,156 @@ impl<'a> OrderRepository<'a> {
 
         println!("[order-service] Deleted order:\n{:#?}", order);
         Ok(())
+    }
+
+    /// Find all orders info by customer ID in database.
+    ///
+    /// # Parameters
+    /// - `customer_id` - given order customer identificator.
+    ///
+    /// # Returns
+    /// List of order info - in case of success.
+    /// SQLx error         - otherwise.
+    pub async fn find_all_by_customer_id(&self, customer_id: i32) -> Result<LinkedList<Order>, sqlx::Error> {
+        let query =
+            r#"
+            SELECT id, customer_id, status, address, total_amount,
+            payment_method, products
+            FROM Orders
+            WHERE customer_id = ?
+            "#;
+
+        let rows = sqlx::query_as::<_, Order>(query)
+            .bind(customer_id)
+            .fetch_all(self.pool)
+            .await?;
+
+        let orders: LinkedList<Order> = rows.into_iter().collect();
+        Ok(orders)
+    }
+
+    /// Find all orders info by order status in database.
+    ///
+    /// # Parameters
+    /// - `status` - given order status.
+    ///
+    /// # Returns
+    /// List of order info - in case of success.
+    /// SQLx error         - otherwise.
+    pub async fn find_all_by_status(&self, status: OrderStatus) -> Result<LinkedList<Order>, sqlx::Error> {
+        let query =
+            r#"
+            SELECT id, customer_id, status, address, total_amount,
+            payment_method, products
+            FROM Orders
+            WHERE status = ?
+            "#;
+
+        let rows = sqlx::query_as::<_, Order>(query)
+            .bind(status.as_str())
+            .fetch_all(self.pool)
+            .await?;
+
+        let orders: LinkedList<Order> = rows.into_iter().collect();
+        Ok(orders)
+    }
+
+    /// Get orders info by its identificator in database.
+    ///
+    /// # Parameters
+    /// - `order_id` - given order identificator.
+    ///
+    /// # Returns
+    /// Order data transfer object - in case of success.
+    /// SQLx error                 - otherwise.
+    pub async fn get_order_details(&self, order_id: i32) -> Result<OrderDTO, Box<dyn Error>> {
+        // Get order info.
+        let query =
+            r#"
+            SELECT id, customer_id, status, address, total_amount,
+            payment_method, products
+            FROM Orders
+            WHERE id = ?
+            "#;
+
+        let row = sqlx::query_as::<_, Order>(query)
+            .bind(order_id)
+            .fetch_one(self.pool)
+            .await?;
+
+        let (created_at, updated_at) = self.get_time_info(order_id).await?;
+
+        let order = OrderDTO {
+            id: row.id,
+            customer_id: row.customer_id,
+            status: OrderStatus::from(row.status.as_str()),
+            address: row.address,
+            created_at,
+            updated_at,
+            payment_method: row.payment_method,
+            // TODO: get courier contact using order id.
+            courier_contact: "???".to_string(),
+            products: self.get_products_list(row.products)?,
+        };
+
+        Ok(order)
+    }
+
+    /// Get order time info.
+    ///
+    /// # Parameters
+    /// - `order_id` - given order identificator.
+    ///
+    /// # Returns
+    /// Tuple of created_at & updated_at time info - in case of success.
+    /// SQLx error                                 - otherwise.
+    async fn get_time_info(&self, order_id: i32) -> Result<(DateTime<Utc>, DateTime<Utc>), sqlx::Error> {
+        // Get order creation & last update time.
+        let query =
+            r#"
+            SELECT created_at, updated_at
+            FROM Orders
+            WHERE id = ?
+            "#;
+
+        let (created_at, updated_at) = sqlx::query_as::<_, (String, String)>(query)
+            .bind(order_id)
+            .fetch_one(self.pool)
+            .await?;
+
+        // Convert strings to DateTime<Utc> representation (ISO 8601 format).
+        let format = "%Y-%m-%dT%H:%M:%SZ";
+
+        let created_at: DateTime<Utc> = DateTime::from_naive_utc_and_offset(
+            NaiveDateTime::parse_from_str(created_at.as_str(), format).unwrap(),
+            Utc,
+        );
+
+        let updated_at: DateTime<Utc> = DateTime::from_naive_utc_and_offset(
+            NaiveDateTime::parse_from_str(updated_at.as_str(), format).unwrap(),
+            Utc,
+        );
+
+        Ok((created_at, updated_at))
+    }
+
+    /// Get list of products.
+    ///
+    /// # Parameters
+    /// - `products` - given products list string representation.
+    ///
+    /// # Returns
+    /// List of product data transfer objects - in case of success.
+    /// Err                                   - otherwise.
+    fn get_products_list(&self, products: String) -> Result<LinkedList<ProductItemDTO>, Box<dyn Error>> {
+        let mut list: LinkedList<ProductItemDTO> = LinkedList::new();
+
+        for part in products.split(", ") {
+            // TODO: replace with method that find product item DTO from product_id.
+            let _product_id = part.trim().parse::<i32>()?;
+            list.push_back(ProductItemDTO::default());
+        }
+
+        Ok(list)
     }
 }
