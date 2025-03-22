@@ -16,11 +16,16 @@
 
 //! Order related declarations.
 
+<<<<<<< HEAD
+=======
+use chrono::{DateTime, Utc};
+>>>>>>> b636f59 (feat: added order related declarations)
 use sqlx::FromRow;
 
 /// Order info struct.
 #[derive(Debug, Default, FromRow)]
 pub struct Order {
+<<<<<<< HEAD
     /// Order identificator.
     pub id: i32,
     /// Order customer identificator.
@@ -35,10 +40,42 @@ pub struct Order {
     pub payment_method: String,
     /// List of products IDs.
     pub products: String,
+=======
+    /// Order identifier.
+    pub id: i32,
+    /// Order customer identifier.
+    pub customer_id: i32,
+    /// Order status.
+    pub status: OrderStatus,
+    /// Order delivery address.
+    pub address: String,
+    /// Order price.
+    pub price: usize,
+    /// List of products IDs.
+    pub items: Vec<OrderItem>,
+    /// Order creation time.
+    pub created_at: DateTime<Utc>,
+    /// Order last update time.
+    pub updated_at: DateTime<Utc>,
+}
+
+/// Struct for storing information about specific products in an order.
+#[derive(Debug, Default)]
+pub struct OrderItem {
+    /// Product identifier.
+    pub product_id: i32,
+    /// Number of products.
+    pub quantity: i32,
+    /// Price of each product.
+    pub unit_price: usize,
+    /// Total price of an item.
+    pub total_price: usize,
+>>>>>>> b636f59 (feat: added order related declarations)
 }
 
 /// Order status enumeration.
 #[derive(Debug, Default)]
+<<<<<<< HEAD
 pub enum OrderStatus {
     #[default]
     Processing,
@@ -86,3 +123,36 @@ impl From<&str> for OrderStatus {
         }
     }
 }
+=======
+#[repr(u8)]
+pub enum OrderStatus {
+    #[default]
+    Processing = 0,
+    Accepted   = 1,
+    Assembly   = 2,
+    InProgress = 3,
+    Completed  = 4,
+    Cancelled  = 5,
+}
+
+impl From<u8> for OrderStatus {
+    /// Convert string slice to order status.
+    ///
+    /// # Parameters
+    /// - `value` - given unsigned char to convert.
+    ///
+    /// # Returns
+    /// Order status enumeration representation of given value.
+    fn from(value: u8) -> Self {
+        match value {
+            0 => OrderStatus::Processing,
+            1 => OrderStatus::Accepted,
+            2 => OrderStatus::Assembly,
+            3 => OrderStatus::InProgress,
+            4 => OrderStatus::Completed,
+            5 => OrderStatus::Cancelled,
+            _ => OrderStatus::Cancelled,
+        }
+    }
+}
+>>>>>>> b636f59 (feat: added order related declarations)
