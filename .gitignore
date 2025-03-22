@@ -1,5 +1,4 @@
 .vscode/
 target/
-.idea/
 db/
 *.db
