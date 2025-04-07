@@ -20,13 +20,11 @@ use std::error::Error;
 
 #[allow(dead_code)]
 mod repository;
-mod controller;
 mod service;
 mod order;
-mod dto;
 
 use repository::OrderRepository;
-use order::Order;
+
 async fn greet() -> impl Responder {
     HttpResponse::Ok().body("Order Management Microservice")
 }
@@ -37,10 +35,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("[order-service] Connecting database");
 
     // TODO: store full path to database somewhere
-    let pool = SqlitePool::connect("sqlite:../db/database.db").await?;
+    let pool = SqlitePool::connect("sqlite:../db/orders.db").await?;
 
     let order_repository = OrderRepository::new(&pool).await;
-    order_repository.save(Order::default()).await?;
+    // order_repository.save(Order::default()).await?;
+    let order = order_repository.find_by_id(0).await?;
+    println!("Found order: {:#?}", order);
 
     // Run HTTP server.
     let _ = HttpServer::new(|| {
