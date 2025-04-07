@@ -16,115 +16,56 @@
 
 //! Order related declarations.
 
-<<<<<<< HEAD
-=======
-use chrono::{DateTime, Utc};
->>>>>>> b636f59 (feat: added order related declarations)
 use sqlx::FromRow;
 
-/// Order info struct.
+/// Order data transfer object struct.
 #[derive(Debug, Default, FromRow)]
-pub struct Order {
-<<<<<<< HEAD
-    /// Order identificator.
-    pub id: i32,
-    /// Order customer identificator.
-    pub customer_id: i32,
-    /// Order status.
-    pub status: String,
-    /// Order destination address.
-    pub address: String,
-    /// Order price.
-    pub total_amount: f32,
-    /// Order method of payment.
-    pub payment_method: String,
-    /// List of products IDs.
-    pub products: String,
-=======
+pub struct OrderDTO {
     /// Order identifier.
-    pub id: i32,
+    pub order_id: i32,
     /// Order customer identifier.
     pub customer_id: i32,
     /// Order status.
-    pub status: OrderStatus,
+    pub order_status: OrderStatus,
     /// Order delivery address.
     pub address: String,
     /// Order price.
-    pub price: usize,
-    /// List of products IDs.
+    pub price: i64,
+}
+
+/// Order info struct.
+#[derive(Debug, Default)]
+pub struct Order {
+    /// Order data transfer object.
+    pub dto: OrderDTO,
+    /// List of products associated with this order.
     pub items: Vec<OrderItem>,
-    /// Order creation time.
-    pub created_at: DateTime<Utc>,
-    /// Order last update time.
-    pub updated_at: DateTime<Utc>,
+}
+
+impl Order {
+    pub fn new(dto: OrderDTO, items: Vec<OrderItem>) -> Self {
+        Self { dto, items }
+    }
 }
 
 /// Struct for storing information about specific products in an order.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, FromRow)]
 pub struct OrderItem {
+    /// Order identifier.
+    pub order_id: i32,
     /// Product identifier.
     pub product_id: i32,
     /// Number of products.
     pub quantity: i32,
     /// Price of each product.
-    pub unit_price: usize,
+    pub unit_price: i64,
     /// Total price of an item.
-    pub total_price: usize,
->>>>>>> b636f59 (feat: added order related declarations)
+    pub total_price: i64,
 }
 
 /// Order status enumeration.
-#[derive(Debug, Default)]
-<<<<<<< HEAD
-pub enum OrderStatus {
-    #[default]
-    Processing,
-    Accepted,
-    Assembly,
-    InProgress,
-    Completed,
-    Cancelled,
-}
-
-impl OrderStatus {
-    /// Get order status as string representation.
-    ///
-    /// # Returns
-    /// String slice representation of order status.
-    pub fn as_str(&self) -> &str {
-        match self {
-            OrderStatus::Processing => "В обработке",
-            OrderStatus::Accepted => "Принят",
-            OrderStatus::Assembly => "В сборке",
-            OrderStatus::InProgress => "В доставке",
-            OrderStatus::Completed => "Завершен",
-            OrderStatus::Cancelled => "Отменен",
-        }
-    }
-}
-
-impl From<&str> for OrderStatus {
-    /// Convert string slice to order status.
-    ///
-    /// # Parameters
-    /// - `value` - given string slice to convert.
-    ///
-    /// # Returns
-    /// Order status enumeration representation of given value.
-    fn from(value: &str) -> Self {
-        match value {
-             "В обработке" => OrderStatus::Processing,
-             "Принят"      => OrderStatus::Accepted,
-             "В сборке"    => OrderStatus::Assembly,
-             "В доставке"  => OrderStatus::InProgress,
-             "Завершен"    => OrderStatus::Completed,
-             "Отменен"     => OrderStatus::Cancelled,
-            _              => OrderStatus::Cancelled,
-        }
-    }
-}
-=======
-#[repr(u8)]
+#[derive(Debug, Default, sqlx::Type)]
+#[repr(i32)]
 pub enum OrderStatus {
     #[default]
     Processing = 0,
@@ -135,7 +76,7 @@ pub enum OrderStatus {
     Cancelled  = 5,
 }
 
-impl From<u8> for OrderStatus {
+impl From<i32> for OrderStatus {
     /// Convert string slice to order status.
     ///
     /// # Parameters
@@ -143,7 +84,7 @@ impl From<u8> for OrderStatus {
     ///
     /// # Returns
     /// Order status enumeration representation of given value.
-    fn from(value: u8) -> Self {
+    fn from(value: i32) -> Self {
         match value {
             0 => OrderStatus::Processing,
             1 => OrderStatus::Accepted,
@@ -155,4 +96,3 @@ impl From<u8> for OrderStatus {
         }
     }
 }
->>>>>>> b636f59 (feat: added order related declarations)
