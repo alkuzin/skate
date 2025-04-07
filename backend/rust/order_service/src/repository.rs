@@ -16,10 +16,14 @@
 
 //! Order repository declaration.
 
+<<<<<<< HEAD
 use std::{collections::LinkedList, error::Error};
 use chrono::{DateTime, NaiveDateTime, Utc};
 use crate::dto::{OrderDTO, ProductItemDTO};
 use crate::order::{Order, OrderStatus};
+=======
+use crate::order::{Order, OrderDTO, OrderItem};
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
 use sqlx::sqlite::SqlitePool;
 
 /// Struct for communicating with database.
@@ -35,12 +39,17 @@ impl<'a> OrderRepository<'a> {
     /// - `pool` - given connection pool for SQLite database.
     ///
     /// # Returns
+<<<<<<< HEAD
     /// New OrderRepository object.
+=======
+    /// - New `OrderRepository` object.
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
     pub async fn new(pool: &'a SqlitePool) -> Self {
         // Create the Orders table.
         let query =
             r#"
             CREATE TABLE IF NOT EXISTS Orders (
+<<<<<<< HEAD
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 customer_id INTEGER NOT NULL,
                 status TEXT NOT NULL,
@@ -56,6 +65,35 @@ impl<'a> OrderRepository<'a> {
         let _ = sqlx::query(query)
         .execute(pool)
         .await;
+=======
+                order_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+                customer_id  INTEGER NOT NULL,
+                order_status INTEGER NOT NULL,
+                address      TEXT NOT NULL,
+                price        INTEGER NOT NULL
+            );
+            "#;
+
+        if let Err(error) = sqlx::query(query).execute(pool).await {
+            println!("Orders creation error: {:#?}", error);
+        }
+
+        // Create the OrderItems table.
+        let query =
+            r#"
+            CREATE TABLE IF NOT EXISTS OrderItems (
+                order_id    INTEGER NOT NULL,
+                product_id  INTEGER NOT NULL,
+                quantity    INTEGER NOT NULL,
+                unit_price  INTEGER NOT NULL,
+                total_price INTEGER NOT NULL
+            );
+            "#;
+
+        if let Err(error) = sqlx::query(query).execute(pool).await {
+            println!("OrderItems creation error: {:#?}", error);
+        }
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
 
         Self { pool }
     }
@@ -66,6 +104,7 @@ impl<'a> OrderRepository<'a> {
     /// - `id` - given order ID.
     ///
     /// # Returns
+<<<<<<< HEAD
     /// Order      - in case of success.
     /// SQLx error - otherwise.
     pub async fn find_by_id(&self, id: i32) -> Result<Order, sqlx::Error> {
@@ -78,19 +117,49 @@ impl<'a> OrderRepository<'a> {
             "#;
 
         let row = sqlx::query_as::<_, Order>(query)
+=======
+    /// - `Order`      - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn find_by_id(&self, id: i32) -> Result<Order, sqlx::Error> {
+        // Get order DTO.
+        let query =
+            r#"
+            SELECT order_id, customer_id, order_status, address, price
+            FROM Orders
+            WHERE order_id = ?
+            "#;
+
+        let order_dto = sqlx::query_as::<_, OrderDTO>(query)
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
             .bind(id)
             .fetch_one(self.pool)
             .await?;
 
+<<<<<<< HEAD
         Ok(row)
     }
 
     /// Save order info in database.
+=======
+        // Get order items.
+        let query = "SELECT * FROM OrderItems WHERE order_id = ?";
+
+        let order_items: Vec<OrderItem> = sqlx::query_as::<_, OrderItem>(query)
+            .bind(id)
+            .fetch_all(self.pool)
+            .await?;
+
+        Ok(Order::new(order_dto, order_items))
+    }
+
+    /// Save order in database.
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
     ///
     /// # Parameters
     /// - `order` - given order info struct.
     ///
     /// # Returns
+<<<<<<< HEAD
     /// Ok         - in case of success.
     /// SQLx error - otherwise.
     pub async fn save(self, order: Order) -> Result<(), sqlx::Error> {
@@ -115,12 +184,56 @@ impl<'a> OrderRepository<'a> {
         .bind(&current_time)
         .execute(self.pool)
         .await?;
+=======
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn save(self, order: Order) -> Result<(), sqlx::Error> {
+        let query =
+            r#"
+            INSERT INTO Orders
+            (order_id, customer_id, order_status, address, price)
+            VALUES (?, ?, ?, ?, ?)
+            "#;
+
+        // Insert the new order DTO into the database.
+        sqlx::query(query)
+            .bind(&order.dto.order_id)
+            .bind(&order.dto.customer_id)
+            .bind(&order.dto.order_status)
+            .bind(&order.dto.address)
+            .bind(&order.dto.price)
+            .execute(self.pool)
+            .await?;
+
+        // Insert the new order items list into the database.
+        let query =
+            r#"
+            INSERT INTO OrderItems
+            (order_id, product_id, quantity, unit_price, total_price)
+            VALUES (?, ?, ?, ?, ?)
+            "#;
+
+        for item in &order.items {
+            sqlx::query(query)
+                .bind(&order.dto.order_id)
+                .bind(&item.product_id)
+                .bind(&item.quantity)
+                .bind(&item.unit_price)
+                .bind(&item.total_price)
+                .execute(self.pool)
+                .await?;
+        }
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
 
         println!("[order-service] Saved order:\n{:#?}", order);
         Ok(())
     }
 
+<<<<<<< HEAD
     /// Update order info in database.
+=======
+    /// Update order in database.
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
     ///
     /// # Parameters
     /// - `order` - given order info struct.
@@ -133,17 +246,26 @@ impl<'a> OrderRepository<'a> {
             r#"
             UPDATE Orders
             SET
+<<<<<<< HEAD
                 customer_id = ?,
                 status = ?,
                 address = ?,
                 total_amount = ?,
                 payment_method = ?,
                 products = ?,
+=======
+                order_id = ?,
+                customer_id = ?,
+                order_status = ?,
+                address = ?,
+                price = ?,
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
             WHERE id = ?
             "#;
 
         // Insert the new order into the database.
         sqlx::query(query)
+<<<<<<< HEAD
             .bind(&order.customer_id)
             .bind(&order.status)
             .bind(&order.address)
@@ -154,10 +276,44 @@ impl<'a> OrderRepository<'a> {
             .execute(self.pool)
             .await?;
 
+=======
+            .bind(&order.dto.order_id)
+            .bind(&order.dto.customer_id)
+            .bind(&order.dto.order_status)
+            .bind(&order.dto.address)
+            .bind(&order.dto.price)
+            .execute(self.pool)
+            .await?;
+
+        let query =
+            r#"
+            UPDATE OrderItems
+            SET
+                order_id = ?,
+                product_id = ?,
+                quantity = ?,
+                unit_price = ?,
+                total_price = ?,
+            WHERE id = ?
+            "#;
+
+            for item in &order.items {
+                sqlx::query(query)
+                    .bind(&order.dto.order_id)
+                    .bind(&item.product_id)
+                    .bind(&item.quantity)
+                    .bind(&item.unit_price)
+                    .bind(&item.total_price)
+                    .execute(self.pool)
+                    .await?;
+            }
+
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
         println!("[order-service] Updated order:\n{:#?}", order);
         Ok(())
     }
 
+<<<<<<< HEAD
     /// Delete specific order info in database.
     ///
     /// # Parameters
@@ -180,12 +336,31 @@ impl<'a> OrderRepository<'a> {
             .await?;
 
         println!("[order-service] Deleted order:\n{:#?}", order);
+=======
+    /// Delete specific order from database.
+    ///
+    /// # Parameters
+    /// - `id` - given order identifier.
+    ///
+    /// # Returns
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn delete(self, id: i32) -> Result<(), sqlx::Error> {
+        let query = r#"DELETE FROM Orders WHERE order_id = ?"#;
+        sqlx::query(query).bind(&id).execute(self.pool).await?;
+
+        let query = r#"DELETE FROM OrderItems WHERE order_id = ?"#;
+        sqlx::query(query).bind(&id).execute(self.pool).await?;
+
+        println!("[order-service] Deleted order with ID: {}", id);
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
         Ok(())
     }
 
     /// Find all orders info by customer ID in database.
     ///
     /// # Parameters
+<<<<<<< HEAD
     /// - `customer_id` - given order customer identificator.
     ///
     /// # Returns
@@ -196,15 +371,33 @@ impl<'a> OrderRepository<'a> {
             r#"
             SELECT id, customer_id, status, address, total_amount,
             payment_method, products
+=======
+    /// - `customer_id` - given order customer identifier.
+    ///
+    /// # Returns
+    /// - `List of order info` - in case of success.
+    /// - `SQLx error`         - otherwise.
+    pub async fn find_all_by_customer_id(&self, customer_id: i32)
+        -> Result<Vec<Order>, sqlx::Error>
+    {
+        let query =
+            r#"
+            SELECT (order_id, customer_id, order_status, address, price)
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
             FROM Orders
             WHERE customer_id = ?
             "#;
 
+<<<<<<< HEAD
         let rows = sqlx::query_as::<_, Order>(query)
+=======
+        let rows = sqlx::query_as::<_, OrderDTO>(query)
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
             .bind(customer_id)
             .fetch_all(self.pool)
             .await?;
 
+<<<<<<< HEAD
         let orders: LinkedList<Order> = rows.into_iter().collect();
         Ok(orders)
     }
@@ -332,5 +525,71 @@ impl<'a> OrderRepository<'a> {
         }
 
         Ok(list)
+=======
+        let orders_dto: Vec<OrderDTO> = rows.into_iter().collect();
+        let mut orders: Vec<Order> = Vec::with_capacity(orders_dto.len());
+
+        // Find all products associated with orders_dto.
+        for order_dto in orders_dto {
+            let items = self.get_order_items_by_id(order_dto.order_id).await?;
+            orders.push(Order::new(order_dto, items));
+        }
+
+        Ok(orders)
+    }
+
+    /// Get all orders from database.
+    ///
+    /// # Returns
+    /// - List of order data transfer objects - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_all_orders(&self) -> Result<Vec<Order>, sqlx::Error> {
+        let query =
+            r#"
+            SELECT (order_id, customer_id, order_status, address, price)
+            FROM Orders
+            "#;
+
+        let rows = sqlx::query_as::<_, OrderDTO>(query)
+            .fetch_all(self.pool)
+            .await?;
+
+        let orders_dto: Vec<OrderDTO> = rows.into_iter().collect();
+        let mut orders: Vec<Order> = Vec::with_capacity(orders_dto.len());
+
+        // Find all products associated with orders_dto.
+        for order_dto in orders_dto {
+            let items = self.get_order_items_by_id(order_dto.order_id).await?;
+            orders.push(Order::new(order_dto, items));
+        }
+
+        Ok(orders)
+    }
+
+    /// Get all order items from database by order ID.
+    ///
+    /// # Parameters
+    /// - `id` - given order identifier.
+    ///
+    /// # Returns
+    /// - List of order items - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_order_items_by_id(&self, id: i32)
+        -> Result<Vec<OrderItem>, sqlx::Error>
+    {
+        let query =
+            r#"
+            SELECT (order_id, product_id, quantity, unit_price, total_price)
+            FROM OrderItems
+            WHERE order_id = ?
+            "#;
+
+        let items = sqlx::query_as::<_, OrderItem>(query)
+            .bind(id)
+            .fetch_all(self.pool)
+            .await?;
+
+        Ok(items)
+>>>>>>> c252302 (feat: added several new methods for OrderRepository struct)
     }
 }
