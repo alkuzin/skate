@@ -1,0 +1,39 @@
+/* Оформление заказа */
+#order-form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#order-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+#order-form input,
+#order-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#order-form button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+#order-form button:hover {
+    background-color: #e65c00;
+}
