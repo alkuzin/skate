@@ -16,9 +16,32 @@
 
 //! Order service main struct declaration.
 
-use crate::repository::OrderRepository;
+use crate::{config, repository::OrderRepository};
+use sqlx::SqlitePool;
 
-pub struct OrderService<'a> {
+#[derive(Debug)]
+pub struct OrderService {
     /// Struct for communicating with database.
-    repository: OrderRepository<'a>,
+    repository: OrderRepository,
+}
+
+impl OrderService {
+    /// Construct new OrderService object.
+    ///
+    /// # Returns
+    /// - New `OrderRepository` object - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn new() -> Result<Self, sqlx::Error> {
+        let pool = SqlitePool::connect(config::DATABASE_PATH).await?;
+        Ok(Self { repository: OrderRepository::new(pool).await })
+    }
+
+    /// Initialize order service.
+    ///
+    /// # Returns
+    /// - `Ok` - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn init(&mut self) -> Result<(), sqlx::Error> {
+        Ok(())
+    }
 }
