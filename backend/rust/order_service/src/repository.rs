@@ -20,12 +20,13 @@ use crate::order::{Order, OrderDTO, OrderItem};
 use sqlx::sqlite::SqlitePool;
 
 /// Struct for communicating with database.
-pub struct OrderRepository<'a> {
+#[derive(Debug)]
+pub struct OrderRepository {
     /// Connection pool for SQLite database.
-    pool: &'a SqlitePool,
+    pool: SqlitePool,
 }
 
-impl<'a> OrderRepository<'a> {
+impl OrderRepository {
     /// Construct new OrderRepository object.
     ///
     /// # Parameters
@@ -33,7 +34,7 @@ impl<'a> OrderRepository<'a> {
     ///
     /// # Returns
     /// - New `OrderRepository` object.
-    pub async fn new(pool: &'a SqlitePool) -> Self {
+    pub async fn new(pool: SqlitePool) -> Self {
         // Create the Orders table.
         let query =
             r#"
@@ -46,7 +47,7 @@ impl<'a> OrderRepository<'a> {
             );
             "#;
 
-        if let Err(error) = sqlx::query(query).execute(pool).await {
+        if let Err(error) = sqlx::query(query).execute(&pool).await {
             println!("Orders creation error: {:#?}", error);
         }
 
@@ -62,7 +63,7 @@ impl<'a> OrderRepository<'a> {
             );
             "#;
 
-        if let Err(error) = sqlx::query(query).execute(pool).await {
+        if let Err(error) = sqlx::query(query).execute(&pool).await {
             println!("OrderItems creation error: {:#?}", error);
         }
 
@@ -88,7 +89,7 @@ impl<'a> OrderRepository<'a> {
 
         let order_dto = sqlx::query_as::<_, OrderDTO>(query)
             .bind(id)
-            .fetch_one(self.pool)
+            .fetch_one(&self.pool)
             .await?;
 
         // Get order items.
@@ -96,7 +97,7 @@ impl<'a> OrderRepository<'a> {
 
         let order_items: Vec<OrderItem> = sqlx::query_as::<_, OrderItem>(query)
             .bind(id)
-            .fetch_all(self.pool)
+            .fetch_all(&self.pool)
             .await?;
 
         Ok(Order::new(order_dto, order_items))
@@ -125,7 +126,7 @@ impl<'a> OrderRepository<'a> {
             .bind(&order.dto.order_status)
             .bind(&order.dto.address)
             .bind(&order.dto.price)
-            .execute(self.pool)
+            .execute(&self.pool)
             .await?;
 
         // Insert the new order items list into the database.
@@ -143,7 +144,7 @@ impl<'a> OrderRepository<'a> {
                 .bind(&item.quantity)
                 .bind(&item.unit_price)
                 .bind(&item.total_price)
-                .execute(self.pool)
+                .execute(&self.pool)
                 .await?;
         }
 
@@ -179,7 +180,7 @@ impl<'a> OrderRepository<'a> {
             .bind(&order.dto.order_status)
             .bind(&order.dto.address)
             .bind(&order.dto.price)
-            .execute(self.pool)
+            .execute(&self.pool)
             .await?;
 
         let query =
@@ -201,7 +202,7 @@ impl<'a> OrderRepository<'a> {
                     .bind(&item.quantity)
                     .bind(&item.unit_price)
                     .bind(&item.total_price)
-                    .execute(self.pool)
+                    .execute(&self.pool)
                     .await?;
             }
 
@@ -219,10 +220,10 @@ impl<'a> OrderRepository<'a> {
     /// - `SQLx error` - otherwise.
     pub async fn delete(self, id: i32) -> Result<(), sqlx::Error> {
         let query = r#"DELETE FROM Orders WHERE order_id = ?"#;
-        sqlx::query(query).bind(&id).execute(self.pool).await?;
+        sqlx::query(query).bind(&id).execute(&self.pool).await?;
 
         let query = r#"DELETE FROM OrderItems WHERE order_id = ?"#;
-        sqlx::query(query).bind(&id).execute(self.pool).await?;
+        sqlx::query(query).bind(&id).execute(&self.pool).await?;
 
         println!("[order-service] Deleted order with ID: {}", id);
         Ok(())
@@ -248,7 +249,7 @@ impl<'a> OrderRepository<'a> {
 
         let rows = sqlx::query_as::<_, OrderDTO>(query)
             .bind(customer_id)
-            .fetch_all(self.pool)
+            .fetch_all(&self.pool)
             .await?;
 
         let orders_dto: Vec<OrderDTO> = rows.into_iter().collect();
@@ -276,7 +277,7 @@ impl<'a> OrderRepository<'a> {
             "#;
 
         let rows = sqlx::query_as::<_, OrderDTO>(query)
-            .fetch_all(self.pool)
+            .fetch_all(&self.pool)
             .await?;
 
         let orders_dto: Vec<OrderDTO> = rows.into_iter().collect();
@@ -311,7 +312,7 @@ impl<'a> OrderRepository<'a> {
 
         let items = sqlx::query_as::<_, OrderItem>(query)
             .bind(id)
-            .fetch_all(self.pool)
+            .fetch_all(&self.pool)
             .await?;
 
         Ok(items)
