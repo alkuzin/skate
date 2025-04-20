@@ -43,6 +43,14 @@ pub struct Order {
 }
 
 impl Order {
+    /// Construct new Order object.
+    ///
+    /// # Parameters
+    /// - `dto` - given order data transfer object.
+    /// - `items` - given vector of order items.
+    ///
+    /// # Returns
+    /// - New `Order` object.
     pub fn new(dto: OrderDTO, items: Vec<OrderItem>) -> Self {
         Self { dto, items }
     }
