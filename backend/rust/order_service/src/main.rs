@@ -14,16 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
-use sqlx::sqlite::SqlitePool;
-use std::error::Error;
+//! Order service entry point.
 
 #[allow(dead_code)]
 mod repository;
 mod service;
 mod order;
+mod config;
 
-use repository::OrderRepository;
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use service::OrderService;
+use std::error::Error;
 
 async fn greet() -> impl Responder {
     HttpResponse::Ok().body("Order Management Microservice")
@@ -34,20 +35,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("[order-service] Running server");
     println!("[order-service] Connecting database");
 
-    // TODO: store full path to database somewhere
-    let pool = SqlitePool::connect("sqlite:../db/orders.db").await?;
-
-    let order_repository = OrderRepository::new(&pool).await;
-    // order_repository.save(Order::default()).await?;
-    let order = order_repository.find_by_id(0).await?;
-    println!("Found order: {:#?}", order);
+    let mut service = OrderService::new().await?;
+    service.init().await?;
 
     // Run HTTP server.
     let _ = HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(greet)) // GET /
     })
-    .bind("127.0.0.1:8080")?
+    .bind(config::BIND_ADDRESS)?
     .run()
     .await;
 
