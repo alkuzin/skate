@@ -202,7 +202,7 @@ mod tests {
     #[actix_web::test]
     async fn test_update_order_incorrect() {
         let service = setup_order_service().await;
-        let result  = service.update_order(112, Order::default()).await;
+        let result  = service.update_order(0, Order::default()).await;
 
         assert!(result.is_err(), "Should return error");
     }
