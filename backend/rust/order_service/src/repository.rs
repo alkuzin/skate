@@ -187,27 +187,28 @@ impl OrderRepository {
             return Err(sqlx::Error::RowNotFound);
         }
 
+        // Remove previous order items associated with this order.
+        let query = "DELETE FROM OrderItems WHERE order_id = ?";
+        sqlx::query(query).bind(&id).execute(&self.pool).await?;
+
+        // Insert the new order items list into the database.
         let query =
             r#"
-            UPDATE OrderItems
-            SET
-                product_id = ?,
-                quantity = ?,
-                unit_price = ?,
-                total_price = ?
-            WHERE order_id = ?
+            INSERT INTO OrderItems
+            (order_id, product_id, quantity, unit_price, total_price)
+            VALUES (?, ?, ?, ?, ?)
             "#;
 
-            for item in &order.items {
-                sqlx::query(query)
-                    .bind(&item.product_id)
-                    .bind(&item.quantity)
-                    .bind(&item.unit_price)
-                    .bind(&item.total_price)
-                    .bind(&id)
-                    .execute(&self.pool)
-                    .await?;
-            }
+        for item in &order.items {
+            sqlx::query(query)
+                .bind(&order.dto.order_id)
+                .bind(&item.product_id)
+                .bind(&item.quantity)
+                .bind(&item.unit_price)
+                .bind(&item.total_price)
+                .execute(&self.pool)
+                .await?;
+        }
 
         Ok(())
     }
