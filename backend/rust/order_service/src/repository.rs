@@ -278,8 +278,8 @@ impl OrderRepository {
     pub async fn get_all_orders(&self) -> Result<Vec<Order>, sqlx::Error> {
         let query =
             r#"
-            SELECT (order_id, customer_id, order_status, address, price)
-            FROM Orders
+            SELECT order_id, customer_id, order_status, address, price
+            FROM Orders;
             "#;
 
         let rows = sqlx::query_as::<_, OrderDTO>(query)
@@ -311,7 +311,7 @@ impl OrderRepository {
     {
         let query =
             r#"
-            SELECT (order_id, product_id, quantity, unit_price, total_price)
+            SELECT order_id, product_id, quantity, unit_price, total_price
             FROM OrderItems
             WHERE order_id = ?
             "#;
