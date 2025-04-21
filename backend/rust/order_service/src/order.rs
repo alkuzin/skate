@@ -17,10 +17,10 @@
 //! Order related declarations.
 
 use sqlx::FromRow;
-use serde::Deserialize;
+use serde::{Serialize, Deserialize};
 
 /// Order data transfer object struct.
-#[derive(Debug, Default, FromRow, Deserialize)]
+#[derive(Debug, Default, FromRow, Serialize, Deserialize)]
 pub struct OrderDTO {
     /// Order identifier.
     pub order_id: i64,
@@ -35,7 +35,7 @@ pub struct OrderDTO {
 }
 
 /// Order info struct.
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Order {
     /// Order data transfer object.
     pub dto: OrderDTO,
@@ -58,7 +58,7 @@ impl Order {
 }
 
 /// Struct for storing information about specific products in an order.
-#[derive(Debug, Default, Clone, FromRow, Deserialize)]
+#[derive(Debug, Default, Clone, FromRow, Serialize, Deserialize)]
 pub struct OrderItem {
     /// Order identifier.
     pub order_id: i64,
@@ -73,7 +73,7 @@ pub struct OrderItem {
 }
 
 /// Order status enumeration.
-#[derive(Debug, Default, sqlx::Type, Deserialize)]
+#[derive(Debug, Default, sqlx::Type, Serialize, Deserialize)]
 #[repr(i32)]
 pub enum OrderStatus {
     #[default]

@@ -42,3 +42,21 @@ pub async fn create_order(service: Data<OrderService>, order: Json<Order>)
         Err(e)       => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
+
+/// Get order info.
+///
+/// # Parameters
+/// - `service` - given order service data wrapper and extractor.
+/// - `id`      - given order identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn get_order(service: Data<OrderService>, id: Json<i64>)
+    -> impl Responder
+{
+    match service.get_order(id.0).await {
+        Ok(order) => HttpResponse::Created().json(order),
+        Err(e)    => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
