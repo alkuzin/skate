@@ -120,6 +120,7 @@ impl OrderService {
 
 #[cfg(test)]
 mod tests {
+    use sqlx::migrate::resolve_blocking;
     use crate::{config, order::{OrderDTO, OrderItem, OrderStatus}};
     use super::*;
 
@@ -226,5 +227,20 @@ mod tests {
         let result  = service.delete_order(0).await;
 
         assert!(result.is_err(), "Should return error");
+    }
+
+    #[actix_web::test]
+    async fn test_get_order_list_correct() {
+        let service = setup_order_service().await;
+        let result  = service.get_order_list().await;
+
+        assert!(result.is_ok(), "Error to get list of orders: {:#?}", result);
+
+        let order_list = result.unwrap();
+        println!("Order list with {} orders:", order_list.len());
+
+        for (i, order) in order_list.iter().enumerate() {
+            println!("Order ({}): {:?}", i, order);
+        }
     }
 }
