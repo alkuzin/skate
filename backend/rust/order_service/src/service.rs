@@ -120,8 +120,7 @@ impl OrderService {
 
 #[cfg(test)]
 mod tests {
-    use crate::config;
-    use crate::order::{OrderDTO, OrderItem, OrderStatus};
+    use crate::{config, order::{OrderDTO, OrderItem, OrderStatus}};
     use super::*;
 
     async fn setup_order_service() -> OrderService {
@@ -204,6 +203,27 @@ mod tests {
     async fn test_update_order_incorrect() {
         let service = setup_order_service().await;
         let result  = service.update_order(112, Order::default()).await;
+
+        assert!(result.is_err(), "Should return error");
+    }
+
+    #[actix_web::test]
+    async fn test_delete_order_correct() {
+        let service = setup_order_service().await;
+        let result  = service.create_order(Order::default()).await;
+        assert!(result.is_ok(), "Error to create order: {:#?}", result);
+
+        let order_id = result.unwrap();
+        let result   = service.delete_order(order_id).await;
+        assert!(result.is_ok(), "Error to delete order: {:#?}", result);
+
+        println!("Deleted order with ID: {}", order_id);
+    }
+
+    #[actix_web::test]
+    async fn test_delete_order_incorrect() {
+        let service = setup_order_service().await;
+        let result  = service.delete_order(0).await;
 
         assert!(result.is_err(), "Should return error");
     }
