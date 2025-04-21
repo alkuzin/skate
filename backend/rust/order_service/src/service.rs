@@ -20,7 +20,7 @@ use crate::{repository::OrderRepository, order::Order};
 use std::{fs::File, path::Path};
 use sqlx::SqlitePool;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OrderService {
     /// Struct for communicating with database.
     repository: OrderRepository,
@@ -120,7 +120,6 @@ impl OrderService {
 
 #[cfg(test)]
 mod tests {
-    use sqlx::migrate::resolve_blocking;
     use crate::{config, order::{OrderDTO, OrderItem, OrderStatus}};
     use super::*;
 
@@ -129,7 +128,7 @@ mod tests {
             .expect("OrderService::new() should succeed!");
 
         let init_result = service.init().await
-            .expect("OrderService::init_result() should succeed!");
+            .expect("OrderService::init() should succeed!");
 
         service
     }

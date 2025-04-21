@@ -16,19 +16,9 @@
 
 //! Order service entry point.
 
-#[allow(dead_code)]
-mod repository;
-mod service;
-mod order;
-mod config;
-
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
-use service::OrderService;
+use order_service::{service::OrderService, config, create_order};
+use actix_web::{web::{self, Data}, App, HttpServer};
 use std::error::Error;
-
-async fn greet() -> impl Responder {
-    HttpResponse::Ok().body("Order Management Microservice")
-}
 
 #[actix_web::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -39,9 +29,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
     service.init().await?;
 
     // Run HTTP server.
-    let _ = HttpServer::new(|| {
+    let _ = HttpServer::new(move || {
         App::new()
-            .route("/", web::get().to(greet)) // GET /
+            .app_data(Data::new(service.clone()))
+            .route("/orders", web::post().to(create_order))
     })
     .bind(config::BIND_ADDRESS)?
     .run()
@@ -49,3 +40,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+
+// TODO: implement:
+// .route("/orders", web::post().to(create_order))
+// .route("/orders/{id}", web::get().to(get_order))
+// .route("/orders/{id}", web::put().to(update_order))
+// .route("/orders/{id}", web::delete().to(delete_order))
+// .route("/orders", web::get().to(list_orders))

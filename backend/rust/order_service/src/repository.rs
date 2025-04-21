@@ -20,7 +20,7 @@ use crate::order::{Order, OrderDTO, OrderItem};
 use sqlx::sqlite::SqlitePool;
 
 /// Struct for communicating with database.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OrderRepository {
     /// Connection pool for SQLite database.
     pool: SqlitePool,
