@@ -129,6 +129,8 @@ impl OrderRepository {
             .fetch_one(&self.pool)
             .await?;
 
+        let order_id = row.0;
+
         // Insert the new order items list into the database.
         let query =
             r#"
@@ -139,7 +141,7 @@ impl OrderRepository {
 
         for item in &order.items {
             sqlx::query(query)
-                .bind(&order.dto.order_id)
+                .bind(&order_id)
                 .bind(&item.product_id)
                 .bind(&item.quantity)
                 .bind(&item.unit_price)
@@ -148,7 +150,7 @@ impl OrderRepository {
                 .await?;
         }
 
-        Ok(row.0)
+        Ok(order_id)
     }
 
     /// Update order in database.
