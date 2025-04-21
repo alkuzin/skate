@@ -97,3 +97,20 @@ pub async fn delete_order(service: Data<OrderService>, id: web::Path<i64>)
         Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
+
+/// Get order info list.
+///
+/// # Parameters
+/// - `service` - given order service data wrapper and extractor.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn get_order_list(service: Data<OrderService>)
+    -> impl Responder
+{
+    match service.get_order_list().await {
+        Ok(orders) => HttpResponse::Created().json(orders),
+        Err(e)     => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
