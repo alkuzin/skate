@@ -77,7 +77,7 @@ impl OrderService {
     /// # Returns
     /// - Order info   - in case of success.
     /// - `SQLx error` - otherwise.
-    pub async fn get_order(&self, id: i32) -> Result<Order, sqlx::Error> {
+    pub async fn get_order(&self, id: i64) -> Result<Order, sqlx::Error> {
         self.repository.find_by_id(id).await
     }
 
@@ -146,6 +146,28 @@ mod tests {
         assert!(result.is_ok(), "Error to create order: {:#?}", result);
 
         let order_id = result.unwrap();
-        println!("Created order with ID: {:#?}", order_id);
+        println!("Created order with ID: {}", order_id);
+    }
+
+    #[actix_web::test]
+    async fn test_get_order_correct() {
+        let service = setup_order_service().await;
+        let result  = service.create_order(Order::default()).await;
+        assert!(result.is_ok(), "Error to create order: {:#?}", result);
+
+        let order_id = result.unwrap();
+        let result   = service.get_order(order_id).await;
+        assert!(result.is_ok(), "Error to get order info: {:#?}", result);
+
+        let order = result.unwrap();
+        println!("Get order info with ID {}: {:#?}", order_id, order);
+    }
+
+    #[actix_web::test]
+    async fn test_get_order_incorrect() {
+        let service = setup_order_service().await;
+        let result  = service.get_order(0).await;
+
+        assert!(result.is_err(), "Should return error: {:#?}", result);
     }
 }
