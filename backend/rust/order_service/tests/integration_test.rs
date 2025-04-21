@@ -16,9 +16,10 @@
 
 //! Order service integration tests main module.
 
-use order_service::{create_order, service::OrderService, config};
-use actix_web::{test, web, App};
-use actix_web::http::StatusCode;
+use order_service::{
+    service::OrderService, config, order::Order, create_order, get_order
+};
+use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
 
 async fn setup_order_service() -> OrderService {
@@ -88,5 +89,46 @@ async fn test_create_order() {
     }
     else {
         eprintln!("Error to parse order ID");
+    }
+}
+
+#[actix_web::test]
+async fn test_get_order() {
+    // Create a test app with the service.
+    let service = setup_order_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/orders/{id}",  web::get().to(get_order))
+    ).await;
+
+    let order_id = json!(1);
+
+    // Send a GET request to the /orders/{id} endpoint.
+    let req = test::TestRequest::get()
+        .uri("/orders/{id}")
+        .set_json(&order_id)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+
+    if let Ok(order) = serde_json::from_str::<Order>(
+        body_string.into_owned().as_str()
+    ) {
+        println!("Get order: {:#?}", order);
+        println!("Get order: {:#?}", order.items.len());
+    }
+    else {
+        eprintln!("Error to parse order");
     }
 }
