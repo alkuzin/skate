@@ -57,7 +57,7 @@ impl Order {
 }
 
 /// Struct for storing information about specific products in an order.
-#[derive(Debug, Default, FromRow)]
+#[derive(Debug, Default, Clone, FromRow)]
 pub struct OrderItem {
     /// Order identifier.
     pub order_id: i64,

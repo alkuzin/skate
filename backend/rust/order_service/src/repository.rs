@@ -160,48 +160,51 @@ impl OrderRepository {
     /// # Returns
     /// Ok         - in case of success.
     /// SQLx error - otherwise.
-    pub async fn update(&self, id: i32, order: Order) -> Result<(), sqlx::Error> {
+    pub async fn update(&self, id: i64, order: Order) -> Result<(), sqlx::Error> {
         let query =
             r#"
             UPDATE Orders
             SET
-                order_id = ?,
                 customer_id = ?,
                 order_status = ?,
                 address = ?,
-                price = ?,
-            WHERE id = ?
+                price = ?
+            WHERE order_id = ?
             "#;
 
         // Insert the new order into the database.
-        sqlx::query(query)
-            .bind(&id)
+        let result = sqlx::query(query)
             .bind(&order.dto.customer_id)
             .bind(&order.dto.order_status)
             .bind(&order.dto.address)
             .bind(&order.dto.price)
+            .bind(&id)
             .execute(&self.pool)
             .await?;
+
+        // Handle incorrect order ID.
+        if result.rows_affected() == 0 {
+            return Err(sqlx::Error::RowNotFound);
+        }
 
         let query =
             r#"
             UPDATE OrderItems
             SET
-                order_id = ?,
                 product_id = ?,
                 quantity = ?,
                 unit_price = ?,
-                total_price = ?,
-            WHERE id = ?
+                total_price = ?
+            WHERE order_id = ?
             "#;
 
             for item in &order.items {
                 sqlx::query(query)
-                    .bind(&order.dto.order_id)
                     .bind(&item.product_id)
                     .bind(&item.quantity)
                     .bind(&item.unit_price)
                     .bind(&item.total_price)
+                    .bind(&id)
                     .execute(&self.pool)
                     .await?;
             }
@@ -217,7 +220,7 @@ impl OrderRepository {
     /// # Returns
     /// - `Ok`         - in case of success.
     /// - `SQLx error` - otherwise.
-    pub async fn delete(&self, id: i32) -> Result<(), sqlx::Error> {
+    pub async fn delete(&self, id: i64) -> Result<(), sqlx::Error> {
         let query = r#"DELETE FROM Orders WHERE order_id = ?"#;
         sqlx::query(query).bind(&id).execute(&self.pool).await?;
 
@@ -236,7 +239,7 @@ impl OrderRepository {
     /// # Returns
     /// - `List of order info` - in case of success.
     /// - `SQLx error`         - otherwise.
-    pub async fn find_all_by_customer_id(&self, customer_id: i32)
+    pub async fn find_all_by_customer_id(&self, customer_id: i64)
         -> Result<Vec<Order>, sqlx::Error>
     {
         let query =
