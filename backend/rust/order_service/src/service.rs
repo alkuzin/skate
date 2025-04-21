@@ -127,7 +127,7 @@ mod tests {
         let mut service = OrderService::new(config::TEST_DATABASE_PATH).await
             .expect("OrderService::new() should succeed!");
 
-        let init_result = service.init().await
+        let _ = service.init().await
             .expect("OrderService::init() should succeed!");
 
         service

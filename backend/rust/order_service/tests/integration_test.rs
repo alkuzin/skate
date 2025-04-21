@@ -16,8 +16,9 @@
 
 //! Order service integration tests main module.
 
-use order_service::{service::OrderService, config, order::Order, create_order,
-    get_order, update_order, delete_order
+use order_service::{
+    service::OrderService, config, order::Order,
+    create_order, get_order, update_order, delete_order, get_order_list
 };
 use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
@@ -126,7 +127,6 @@ async fn test_get_order() {
         body_string.into_owned().as_str()
     ) {
         println!("Get order: {:#?}", order);
-        println!("Get order: {:#?}", order.items.len());
     }
     else {
         eprintln!("Error to parse order");
@@ -249,9 +249,49 @@ async fn test_delete_order() {
 
         println!("Received response: {}", body_string);
         assert_eq!(status, StatusCode::CREATED);
-
     }
     else {
         eprintln!("Error to parse order ID");
+    }
+}
+
+#[actix_web::test]
+async fn test_get_order_list() {
+    // Create a test app with the service.
+    let service = setup_order_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/orders", web::get().to(get_order_list))
+    ).await;
+
+    // Send a GET request to the /orders endpoint.
+    let req = test::TestRequest::get()
+        .uri("/orders")
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+
+    if let Ok(order_list) = serde_json::from_str::<Vec<Order>>(
+        body_string.into_owned().as_str()
+    ) {
+        println!("Order list with {} orders:", order_list.len());
+
+        for (i, order) in order_list.iter().enumerate() {
+            println!("Order ({}): {:?}", i, order);
+        }
+    }
+    else {
+        eprintln!("Error to parse order");
     }
 }
