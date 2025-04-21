@@ -16,7 +16,9 @@
 
 //! Order service integration tests main module.
 
-use order_service::{service::OrderService, config, order::Order, create_order, get_order, update_order};
+use order_service::{service::OrderService, config, order::Order, create_order,
+    get_order, update_order, delete_order
+};
 use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
 
@@ -179,4 +181,77 @@ async fn test_update_order() {
 
     println!("Received response: {}", body_string);
     assert_eq!(status, StatusCode::CREATED);
+}
+#[actix_web::test]
+async fn test_delete_order() {
+    // Create a test app with the service.
+    let service = setup_order_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/orders", web::post().to(create_order))
+            .route("/orders/{id}", web::delete().to(delete_order))
+    ).await;
+
+    // Create new order before deleting it.
+    let order = json!({
+        "dto": {
+            "order_id":     1,
+            "customer_id":  123,
+            "order_status": "Completed",
+            "address":      "123 Main St, Anytown, USA",
+            "price":        1000
+        },
+        "items": [
+            {
+                "order_id":    0,
+                "product_id":  456,
+                "quantity":    2,
+                "unit_price":  500,
+                "total_price": 1000
+            }
+        ]
+    });
+
+    // Send a POST request to the /orders endpoint.
+    let req = test::TestRequest::post()
+        .uri("/orders")
+        .set_json(&order)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+
+    if let Ok(id) = body_string.trim().parse::<i64>() {
+        println!("Created order with ID: {}", id);
+
+        // Send a DELETE request to the /orders/{id} endpoint.
+        let req = test::TestRequest::delete()
+            .uri(format!("/orders/{}", id).as_str())
+            .to_request();
+
+        // Call a service.
+        let response = test::call_service(&app, req).await;
+        let status   = response.status();
+
+        // Print the response body.
+        let body_bytes  = test::read_body(response).await;
+        let body_string = String::from_utf8_lossy(&body_bytes);
+
+        println!("Received response: {}", body_string);
+        assert_eq!(status, StatusCode::CREATED);
+
+    }
+    else {
+        eprintln!("Error to parse order ID");
+    }
 }
