@@ -52,19 +52,21 @@ pub async fn create_order(service: Data<OrderService>, order: Json<Order>)
 /// # Returns
 /// - `HttpResponse::Created` - in case of success.
 /// - `HttpResponse::InternalServerError` - otherwise.
-pub async fn get_order(service: Data<OrderService>, id: Json<i64>)
+pub async fn get_order(service: Data<OrderService>,  id: web::Path<i64>)
     -> impl Responder
 {
-    match service.get_order(id.0).await {
+    match service.get_order(id.into_inner()).await {
         Ok(order) => HttpResponse::Created().json(order),
         Err(e)    => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
+
 /// Update order info.
 ///
 /// # Parameters
 /// - `service` - given order service data wrapper and extractor.
 /// - `id`      - given order identifier.
+/// - `order`   - given details of the order to be updated.
 ///
 /// # Returns
 /// - `HttpResponse::Created` - in case of success.
@@ -74,6 +76,24 @@ pub async fn update_order(service: Data<OrderService>, id: web::Path<i64>,
 {
     match service.update_order(id.into_inner(), order.0).await {
         Ok(_)  => HttpResponse::Created().body("Ok"),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Delete order info.
+///
+/// # Parameters
+/// - `service` - given order service data wrapper and extractor.
+/// - `id`      - given order identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn delete_order(service: Data<OrderService>, id: web::Path<i64>)
+    -> impl Responder
+{
+    match service.delete_order(id.into_inner()).await {
+        Ok(_)  => HttpResponse::Created().json("Ok"),
         Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
