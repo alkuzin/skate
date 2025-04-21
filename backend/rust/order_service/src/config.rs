@@ -20,4 +20,7 @@
 pub const BIND_ADDRESS: &str = "127.0.0.1:8080";
 
 /// Service SQLite database path.
-pub const DATABASE_PATH: &str = "sqlite:../db/orders.db";
+pub const DATABASE_PATH: &str = "../db/orders.db";
+
+/// Service SQLite database path for unit tests.
+pub const TEST_DATABASE_PATH: &str = "../db/test_orders.db";
