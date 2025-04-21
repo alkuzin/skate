@@ -48,7 +48,7 @@ impl OrderRepository {
             "#;
 
         if let Err(error) = sqlx::query(query).execute(&pool).await {
-            println!("Orders creation error: {:#?}", error);
+            eprintln!("Orders creation error: {:#?}", error);
         }
 
         // Create the OrderItems table.
@@ -64,7 +64,7 @@ impl OrderRepository {
             "#;
 
         if let Err(error) = sqlx::query(query).execute(&pool).await {
-            println!("OrderItems creation error: {:#?}", error);
+            eprintln!("OrderItems creation error: {:#?}", error);
         }
 
         Self { pool }
@@ -78,7 +78,7 @@ impl OrderRepository {
     /// # Returns
     /// - `Order`      - in case of success.
     /// - `SQLx error` - otherwise.
-    pub async fn find_by_id(&self, id: i32) -> Result<Order, sqlx::Error> {
+    pub async fn find_by_id(&self, id: i64) -> Result<Order, sqlx::Error> {
         // Get order DTO.
         let query =
             r#"
@@ -148,7 +148,6 @@ impl OrderRepository {
                 .await?;
         }
 
-        println!("[order-service] Saved order:\n{:#?}", order);
         Ok(row.0)
     }
 
@@ -207,7 +206,6 @@ impl OrderRepository {
                     .await?;
             }
 
-        println!("[order-service] Updated order:\n{:#?}", order);
         Ok(())
     }
 
@@ -301,7 +299,7 @@ impl OrderRepository {
     /// # Returns
     /// - List of order items - in case of success.
     /// - `SQLx error` - otherwise.
-    pub async fn get_order_items_by_id(&self, id: i32)
+    pub async fn get_order_items_by_id(&self, id: i64)
         -> Result<Vec<OrderItem>, sqlx::Error>
     {
         let query =

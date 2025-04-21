@@ -22,9 +22,9 @@ use sqlx::FromRow;
 #[derive(Debug, Default, FromRow)]
 pub struct OrderDTO {
     /// Order identifier.
-    pub order_id: i32,
+    pub order_id: i64,
     /// Order customer identifier.
-    pub customer_id: i32,
+    pub customer_id: i64,
     /// Order status.
     pub order_status: OrderStatus,
     /// Order delivery address.
@@ -60,11 +60,11 @@ impl Order {
 #[derive(Debug, Default, FromRow)]
 pub struct OrderItem {
     /// Order identifier.
-    pub order_id: i32,
+    pub order_id: i64,
     /// Product identifier.
-    pub product_id: i32,
+    pub product_id: i64,
     /// Number of products.
-    pub quantity: i32,
+    pub quantity: i64,
     /// Price of each product.
     pub unit_price: i64,
     /// Total price of an item.
