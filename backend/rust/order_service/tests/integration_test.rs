@@ -16,9 +16,7 @@
 
 //! Order service integration tests main module.
 
-use order_service::{
-    service::OrderService, config, order::Order, create_order, get_order
-};
+use order_service::{service::OrderService, config, order::Order, create_order, get_order, update_order};
 use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
 
@@ -100,14 +98,14 @@ async fn test_get_order() {
     let app = test::init_service(
         App::new()
             .app_data(web::Data::new(service))
-            .route("/orders/{id}",  web::get().to(get_order))
+            .route("/orders/{id}", web::get().to(get_order))
     ).await;
 
     let order_id = json!(1);
 
     // Send a GET request to the /orders/{id} endpoint.
     let req = test::TestRequest::get()
-        .uri("/orders/{id}")
+        .uri(format!("/orders/{}", order_id).as_str())
         .set_json(&order_id)
         .to_request();
 
@@ -131,4 +129,54 @@ async fn test_get_order() {
     else {
         eprintln!("Error to parse order");
     }
+}
+
+#[actix_web::test]
+async fn test_update_order() {
+    // Create a test app with the service.
+    let service = setup_order_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/orders/{id}", web::put().to(update_order))
+    ).await;
+
+    let order = json!({
+        "dto": {
+            "order_id":     1,
+            "customer_id":  123,
+            "order_status": "Completed",
+            "address":      "123 Main St, Anytown, USA",
+            "price":        1000
+        },
+        "items": [
+            {
+                "order_id":    0,
+                "product_id":  456,
+                "quantity":    2,
+                "unit_price":  500,
+                "total_price": 1000
+            }
+        ]
+    });
+
+    let order_id = 1;
+
+    // Send a PUT request to the /orders/{id} endpoint.
+    let req = test::TestRequest::put()
+        .uri(&format!("/orders/{}", order_id))
+        .set_json(&order)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
 }
