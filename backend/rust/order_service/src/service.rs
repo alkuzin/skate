@@ -90,7 +90,7 @@ impl OrderService {
     /// # Returns
     /// - `Ok`         - in case of success.
     /// - `SQLx error` - otherwise.
-    pub async fn update_order(&self, id: i32, order: Order)
+    pub async fn update_order(&self, id: i64, order: Order)
         -> Result<(), sqlx::Error>
     {
         self.repository.update(id, order).await
@@ -104,7 +104,7 @@ impl OrderService {
     /// # Returns
     /// - `Ok`         - in case of success.
     /// - `SQLx error` - otherwise.
-    pub async fn delete_order(&self, id: i32) -> Result<(), sqlx::Error> {
+    pub async fn delete_order(&self, id: i64) -> Result<(), sqlx::Error> {
         self.repository.delete(id).await
     }
 
@@ -121,6 +121,7 @@ impl OrderService {
 #[cfg(test)]
 mod tests {
     use crate::config;
+    use crate::order::{OrderDTO, OrderItem, OrderStatus};
     use super::*;
 
     async fn setup_order_service() -> OrderService {
@@ -169,5 +170,41 @@ mod tests {
         let result  = service.get_order(0).await;
 
         assert!(result.is_err(), "Should return error: {:#?}", result);
+    }
+
+    #[actix_web::test]
+    async fn test_update_order_correct() {
+        let service  = setup_order_service().await;
+        let order_id = 1;
+
+        // Fill order info.
+        let order_dto = OrderDTO {
+            order_id,
+            customer_id:  0,
+            order_status: OrderStatus::Assembly,
+            address:      "In the middle of nowhere".to_string(),
+            price:        42,
+        };
+        let order_items = vec![OrderItem::default(); 3];
+        let order = Order::new(order_dto, order_items);
+
+        // Try update order info.
+        let result = service.update_order(order_id, order).await;
+        assert!(result.is_ok(), "Error to update order info: {:#?}", result);
+
+        // Try get updated order info.
+        let result = service.get_order(order_id).await;
+        assert!(result.is_ok(), "Error to get order info: {:#?}", result);
+
+        let order = result.unwrap();
+        println!("Updated order info with ID {}: {:#?}", order_id, order);
+    }
+
+    #[actix_web::test]
+    async fn test_update_order_incorrect() {
+        let service = setup_order_service().await;
+        let result  = service.update_order(112, Order::default()).await;
+
+        assert!(result.is_err(), "Should return error");
     }
 }
