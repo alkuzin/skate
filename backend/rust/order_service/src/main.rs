@@ -16,7 +16,9 @@
 
 //! Order service entry point.
 
-use order_service::{service::OrderService, config, create_order, get_order};
+use order_service::{
+    service::OrderService, config, create_order, get_order, update_order
+};
 use actix_web::{web::{self, Data}, App, HttpServer};
 use std::error::Error;
 
@@ -34,6 +36,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             .app_data(Data::new(service.clone()))
             .route("/orders",       web::post().to(create_order))
             .route("/orders/{id}",  web::get().to(get_order))
+            .route("/orders/{id}",  web::put().to(update_order))
     })
     .bind(config::BIND_ADDRESS)?
     .run()
@@ -43,6 +46,5 @@ async fn main() -> Result<(), Box<dyn Error>> {
 }
 
 // TODO: implement:
-// .route("/orders/{id}", web::put().to(update_order))
 // .route("/orders/{id}", web::delete().to(delete_order))
 // .route("/orders", web::get().to(list_orders))

@@ -21,7 +21,7 @@ pub mod service;
 pub mod order;
 pub mod config;
 
-use actix_web::{HttpResponse, Responder, web::{Data, Json}};
+use actix_web::{HttpResponse, Responder, web::{Data, Json}, web};
 use service::OrderService;
 use order::Order;
 
@@ -58,5 +58,22 @@ pub async fn get_order(service: Data<OrderService>, id: Json<i64>)
     match service.get_order(id.0).await {
         Ok(order) => HttpResponse::Created().json(order),
         Err(e)    => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+/// Update order info.
+///
+/// # Parameters
+/// - `service` - given order service data wrapper and extractor.
+/// - `id`      - given order identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn update_order(service: Data<OrderService>, id: web::Path<i64>,
+    order: Json<Order>) -> impl Responder
+{
+    match service.update_order(id.into_inner(), order.0).await {
+        Ok(_)  => HttpResponse::Created().body("Ok"),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
