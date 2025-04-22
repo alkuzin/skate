@@ -12,41 +12,47 @@ const productsDB = {
         price: 350,
         category: 'cold-rolls',
         image: '../res/images/dish-of-day.jpg'
+        
     },
     'set1': {
         id: 'set1',
         name: 'Сет "Домашний"',
         price: 1400,
         category: 'sets',
-        image: '../res/images/set1.jpg'
+        image: '../res/images/set1.jpg',
+        description: 'Сет на 3 персоны. Запечёные роллы с креветкой, с куриным филе, с крабом, с лососем. Подаётся с имбирём, васаби и соевым соусом 820г.'
     },
     'set2': {
         id: 'set2',
         name: 'Сет "Горячий"',
         price: 1600,
         category: 'sets',
-        image: '../res/images/set2.jpg'
+        image: '../res/images/set2.jpg',
+        description: 'Сет на 4 персоны. Темпура с крабом и курицей, джусто, кунашир, темпура с курицей и беконом с соусом спайси. Подаётся с соусом спайси 1000г.'
     },
     'set3': {
         id: 'set3',
         name: 'Сет "Мини гриль"',
         price: 1500,
         category: 'sets',
-        image: '../res/images/set3.jpg'
+        image: '../res/images/set3.jpg',
+        description: 'Сет на 4 персоны. Запечёные роллы с креветкой, с лососем, йоджи кани, брюс ли. Подаётся с имбирём, васаби и соевым соусом 930г.'
     },
     'set4': {
         id: 'set4',
         name: 'Сет "СамСам"',
         price: 1000,
         category: 'sets',
-        image: '../res/images/set4.jpg'
+        image: '../res/images/set4.jpg',
+        description: 'Сет на 2 персоны. Спайси суши с лососем, с креветкой, маки с лососем, калифорния с крабом. Подаётся с имбирём, васаби и соевым соусом 400г.'
     },
     'set5': {
         id: 'set5',
         name: 'Сет "Мега"',
         price: 2765,
         category: 'sets',
-        image: '../res/images/set5.jpg'
+        image: '../res/images/set5.jpg',
+        description: 'Сет на 6 персон. Йоджи кани, йоджи сяке, брюс ли, инь ян, филадельфия с огурцом, калифорния с лососем, маки с креветкой, с лососем. Подаётся с имбирём, васаби и соевым соусом 1650г.'
     },
 
     // Холодные роллы
@@ -55,35 +61,40 @@ const productsDB = {
         name: 'Ролл с Авокадо',
         price: 260,
         category: 'cold-rolls',
-        image: '../res/images/roll1.jpg'
+        image: '../res/images/roll1.jpg',
+        description: '110г 8 кусочков: Классический ролл с авокадо. Подается с соевым соусом, васаби и имбирём.'
     },
     'roll2': {
         id: 'roll2',
         name: 'Ролл с Огурцом',
         price: 235,
         category: 'cold-rolls',
-        image: '../res/images/roll2.jpg'
+        image: '../res/images/roll2.jpg',
+        description: '110г 8 кусочков: Классический ролл с хрустящим огурцом. Подается с соевым соусом, васаби и имбирём.'
     },
     'roll3': {
         id: 'roll3',
         name: 'Ролл с Лососем',
         price: 355,
         category: 'cold-rolls',
-        image: '../res/images/roll3.jpg'
+        image: '../res/images/roll3.jpg',
+        description: '110г 8 кусочков: Классический ролл с охлаждённым лососем. Подается с соевым соусом, васаби и имбирём.'
     },
     'roll4': {
         id: 'roll4',
         name: 'Ролл с Тунцом',
         price: 323,
         category: 'cold-rolls',
-        image: '../res/images/roll4.jpg'
+        image: '../res/images/roll4.jpg',
+        description: '110г 8 кусочков: Классический ролл с тунцом. Подается с соевым соусом, васаби и имбирём.'
     },
     'roll5': {
         id: 'roll5',
         name: 'Ролл с Креветкой',
         price: 307,
         category: 'cold-rolls',
-        image: '../res/images/roll5.jpg'
+        image: '../res/images/roll5.jpg',
+        description: '110г 8 кусочков: Классический ролл с тигровыми креветками. Подается с соевым соусом, васаби и имбирём.'
     },
 
     // Горячие роллы
@@ -92,35 +103,40 @@ const productsDB = {
         name: 'Ролл "Ацуй"',
         price: 565,
         category: 'hot-rolls',
-        image: '../res/images/hot-roll1.jpg'
+        image: '../res/images/hot-roll1.jpg',
+        description: 'Темпура ролл с лососем, угрём, копчёным беконом и сыром моцарелла 200г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.'
     },
     'hot-roll2': {
         id: 'hot-roll2',
         name: 'Ролл "Темпура с лососем"',
         price: 535,
         category: 'hot-rolls',
-        image: '../res/images/hot-roll2.jpg'
+        image: '../res/images/hot-roll2.jpg',
+        description: 'Темпура ролл с лососем, сливочным сыром, огурцом, зелёным луком и икрой масаго под ореховым соусом и унаги 230г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.'
     },
     'hot-roll3': {
         id: 'hot-roll3',
         name: 'Ролл "Кунашир"',
         price: 497,
         category: 'hot-rolls',
-        image: '../res/images/hot-roll3.jpg'
+        image: '../res/images/hot-roll3.jpg',
+        description: 'Темпура ролл с лососем, тунцом, тигровыми креветками, кальмаром и икрой масаго 200г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.'
     },
     'hot-roll4': {
         id: 'hot-roll4',
         name: 'Ролл "Темпура краш"',
         price: 487,
         category: 'hot-rolls',
-        image: '../res/images/hot-roll4.jpg'
+        image: '../res/images/hot-roll4.jpg',
+        description: 'Темпура ролл с овощами и сливочным сыром под шапкой из крабового тартара, лука фри и зелёного лука с сырным соусом и унаги 300г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.'
     },
     'hot-roll5': {
         id: 'hot-roll5',
         name: 'Ролл "Горячий цезарь"',
         price: 425,
         category: 'hot-rolls',
-        image: '../res/images/hot-roll5.jpg'
+        image: '../res/images/hot-roll5.jpg',
+        description: 'Темпура ролл с куриным филе, томатом, листьями салата и соусом цезарь 200г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.'
     },
 
     // Пицца
@@ -129,35 +145,40 @@ const productsDB = {
         name: 'Пицца "Маргарита"',
         price: 740,
         category: 'pizza',
-        image: '../res/images/pizza1.jpg'
+        image: '../res/images/pizza1.jpg',
+        description: 'Увеличенная порция моцареллы, томаты, итальянские травы, фирменный томатный соус. 30 см, 590 г.'
     },
     'pizza2': {
         id: 'pizza2',
         name: 'Пицца "Пепперони"',
         price: 750,
         category: 'pizza',
-        image: '../res/images/pizza2.jpg'
+        image: '../res/images/pizza2.jpg',
+        description: 'Пикантная пепперони, увеличенная порция моцареллы, фирменный томатный соус. 30 см, 550 г.'
     },
     'pizza3': {
         id: 'pizza3',
         name: 'Пицца "Карбонара"',
         price: 919,
         category: 'pizza',
-        image: '../res/images/pizza3.jpg'
+        image: '../res/images/pizza3.jpg',
+        description: 'Бекон, сыры чеддер и пармезан, моцарелла, томаты, красный лук, чеснок, фирменный соус альфредо, итальянские травы. 30 см, 590 г.'
     },
     'pizza4': {
         id: 'pizza4',
         name: 'Пицца "Песто"',
         price: 819,
         category: 'pizza',
-        image: '../res/images/pizza4.jpg'
+        image: '../res/images/pizza4.jpg',
+        description: 'Цыпленок, соус песто, кубики брынзы, томаты, моцарелла, фирменный соус альфредо. 30 см, 610 г.'
     },
     'pizza5': {
         id: 'pizza5',
         name: 'Пицца "Сырный цыпленок"',
         price: 839,
         category: 'pizza',
-        image: '../res/images/pizza5.jpg'
+        image: '../res/images/pizza5.jpg',
+        description: 'Цыпленок, моцарелла, сыры чеддер и пармезан, сырный соус, томаты, фирменный соус альфредо, чеснок. 30 см, 620 г.'
     },
 
 
@@ -167,14 +188,16 @@ const productsDB = {
         name: 'Поке с тигровыми креветками и битыми огурцами',
         price: 490,
         category: 'poke',
-        image: '../res/images/poke1.jpg'
+        image: '../res/images/poke1.jpg',
+        description: 'Поке с натуральным соусом, сочными тигровыми креветками и полезным салатом чука, пряными битыми огурцами, душистым корнем имбиря и свежими помидорами черри.'
     },
     'poke2': {
         id: 'poke2',
         name: 'Поке с тигровыми креветками и командорским кальмаром',
         price: 540,
         category: 'poke',
-        image: '../res/images/poke2.jpg'
+        image: '../res/images/poke2.jpg',
+        description: 'Поке с натуральным соусом, тигровыми креветками и командорским кальмаром, пряными битыми огурцами, душистым корнем имбиря, свежими помидорами черри.'
     },
 
     // Горячее
@@ -183,21 +206,24 @@ const productsDB = {
         name: 'Торидон',
         price: 453,
         category: 'hot',
-        image: '../res/images/hot1.jpg'
+        image: '../res/images/hot1.jpg',
+        description: '295г Маринованный цыплёнок в хрустящей панировке, подаётся на рисе с салатом айсберг, эдамамэ, нори и соусом терияки, соусом чиммай и соусом сладкий чили.'
     },
     'hot2': {
         id: 'hot2',
         name: 'Гёдза с креветкой 6 шт.',
         price: 513,
         category: 'hot',
-        image: '../res/images/hot2.jpg'
+        image: '../res/images/hot2.jpg',
+        description: '100/30г Японские пельмени с тигровыми креветками, капустой, кунжутным маслом и свежей зеленью, под фирменным соусом никкей с долькой лимона.'
     },
     'hot3': {
         id: 'hot3',
         name: 'Томагояки',
         price: 453,
         category: 'hot',
-        image: '../res/images/hot3.jpg'
+        image: '../res/images/hot3.jpg',
+        description: '290г Блюдо на каждый день, в котором поджаренная куриная грудка с рисом, болтуньей, салатом айсберг и хрустящим луком фри, заправлены соусом унаги и ореховым соусом, а зелёный лук, томаты черри, кунжут и фирменный соус гармонично дополняют вкус блюда.'
     },
     
     // Десерт
@@ -206,14 +232,16 @@ const productsDB = {
         name: 'Чизкейк Нью-Йорк',
         price: 295,
         category: 'dessert',
-        image: '../res/images/dessert1.jpg'
+        image: '../res/images/dessert1.jpg',
+        description: 'Чизкейк нью-йорк с топпингом на выбор 125г.'
     },
     'dessert2': {
         id: 'dessert2',
         name: 'Карамельный чизкейк',
         price: 350,
         category: 'dessert',
-        image: '../res/images/dessert2.jpg'
+        image: '../res/images/dessert2.jpg',
+        description: 'Сливочный десерт с очень карамельной начинкой, шоколадным печеньем и орехами, 100 г.'
     },
 
 
@@ -223,28 +251,32 @@ const productsDB = {
         name: 'Сок Rich Вишня',
         price: 200,
         category: 'drinks',
-        image: '../res/images/drink1.jpg'
+        image: '../res/images/drink1.jpg',
+        description: 'Сок Рич 200мл на выбор.'
     },
     'drink2': {
         id: 'drink2',
         name: 'Сок Rich Персик',
         price: 200,
         category: 'drinks',
-        image: '../res/images/drink2.jpg'
+        image: '../res/images/drink2.jpg',
+        description: 'Сок Рич 200мл на выбор.'
     },
     'drink3': {
         id: 'drink3',
         name: 'Сок Rich Яблоко',
         price: 200,
         category: 'drinks',
-        image: '../res/images/drink3.jpg'
+        image: '../res/images/drink3.jpg',
+        description: 'Сок Рич 200мл на выбор.'
     },
     'drink4': {
         id: 'drink4',
         name: 'Сок Rich Апельсин',
         price: 200,
         category: 'drinks',
-        image: '../res/images/drink4.jpg'
+        image: '../res/images/drink4.jpg',
+        description: 'Сок Рич 200мл на выбор.'
     },
     
 };
@@ -408,3 +440,48 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCartUI();
     }
 });
+
+
+// Открытие модального окна товара
+function openProductModal(productId) {
+    const product = productsDB[productId];
+    if (!product) return;
+
+    const modal = document.getElementById('productModal');
+    const modalBody = document.getElementById('productModalBody');
+    
+    // Проверка того, есть ли описание
+    const description = product.description || 'Описание данного товара отсутствует.';
+
+    modalBody.innerHTML = `
+        <div class="product-modal-image">
+            <img src="${product.image}" alt="${product.name}">
+        </div>
+        <div class="product-modal-info">
+            <h2 class="product-modal-title">${product.name}</h2>
+            <p class="product-modal-description">${description}</p>
+            <div class="product-modal-price">${product.price} руб</div>
+            <div class="product-modal-add">
+                <button class="btn" onclick="addToCart('${productId}', event); event.stopPropagation();">Добавить в корзину</button>
+            </div>
+        </div>
+    `;
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+// Закрытие модального окна
+function closeProductModal() {
+    const modal = document.getElementById('productModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Закрытие при клике вне модального окна
+window.onclick = function(event) {
+    const modal = document.getElementById('productModal');
+    if (event.target === modal) {
+        closeProductModal();
+    }
+}

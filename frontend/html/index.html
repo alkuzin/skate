@@ -178,58 +178,58 @@
             <section id="sets" class="menu-category-section">
                 <h2 class="category-title">Сеты</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('set1')">
                         <img src="../res/images/set1.jpg" alt="Сет 1">
                         <div class="product-info">
                             <h3>Сет "Домашний"</h3>
                             <p class="description">Сет на 3 персоны. Запечёные роллы с креветкой, с куриным филе, с крабом, с лососем. Подаётся с имбирём, васаби и соевым соусом 820г.</p>
                             <div class="price-add">
                                 <span class="price">1400 руб</span>
-                                <button class="add-btn" onclick="addToCart('set1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('set1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('set2')">
                         <img src="../res/images/set2.jpg" alt="Сет 2">
                         <div class="product-info">
                             <h3>Сет "Горячий"</h3>
                             <p class="description">Сет на 4 персоны. Темпура с крабом и курицей, джусто, кунашир, темпура с курицей и беконом с соусом спайси. Подаётся с соусом спайси 1000г.</p>
                             <div class="price-add">
                                 <span class="price">1600 руб</span>
-                                <button class="add-btn" onclick="addToCart('set2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('set2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('set3')">
                         <img src="../res/images/set3.jpg" alt="Сет 3">
                         <div class="product-info">
                             <h3>Сет "Мини гриль"</h3>
                             <p class="description">Сет на 4 персоны. Запечёные роллы с креветкой, с лососем, йоджи кани, брюс ли. Подаётся с имбирём, васаби и соевым соусом 930г.</p>
                             <div class="price-add">
                                 <span class="price">1500 руб</span>
-                                <button class="add-btn" onclick="addToCart('set3', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('set3', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('set4')">
                         <img src="../res/images/set4.jpg" alt="Сет 4">
                         <div class="product-info">
                             <h3>Сет "СамСам"</h3>
                             <p class="description">Сет на 2 персоны. Спайси суши с лососем, с креветкой, маки с лососем, калифорния с крабом. Подаётся с имбирём, васаби и соевым соусом 400г.</p>
                             <div class="price-add">
                                 <span class="price">1000 руб</span>
-                                <button class="add-btn" onclick="addToCart('set4', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('set4', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('set5')">
                         <img src="../res/images/set5.jpg" alt="Сет 5">
                         <div class="product-info">
                             <h3>Сет "Мега"</h3>
                             <p class="description">Сет на 6 персон. Йоджи кани, йоджи сяке, брюс ли, инь ян, филадельфия с огурцом, калифорния с лососем, маки с креветкой, с лососем. Подаётся с имбирём, васаби и соевым соусом 1650г.</p>
                             <div class="price-add">
                                 <span class="price">2765 руб</span>
-                                <button class="add-btn" onclick="addToCart('set5', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('set5', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -240,58 +240,58 @@
             <section id="cold-rolls" class="menu-category-section">
                 <h2 class="category-title">Холодные роллы</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('roll1')">
                         <img src="../res/images/roll1.jpg" alt="Ролл с Авокадо">
                         <div class="product-info">
                             <h3>Ролл с Авокадо</h3>
                             <p class="description">110г 8 кусочков: Классический ролл с авокадо. Подается с соевым соусом, васаби и имбирём.</p>
                             <div class="price-add">
                                 <span class="price">260 руб</span>
-                                <button class="add-btn" onclick="addToCart('roll1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('roll1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('roll2')">
                         <img src="../res/images/roll2.jpg" alt="Ролл с Огурцом">
                         <div class="product-info">
                             <h3>Ролл с Огурцом</h3>
                             <p class="description">110г 8 кусочков: Классический ролл с хрустящим огурцом. Подается с соевым соусом, васаби и имбирём.</p>
                             <div class="price-add">
                                 <span class="price">235 руб</span>
-                                <button class="add-btn" onclick="addToCart('roll2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('roll2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('roll3')">
                         <img src="../res/images/roll3.jpg" alt="Ролл с Лососем">
                         <div class="product-info">
                             <h3>Ролл с Лососем</h3>
                             <p class="description">110г 8 кусочков: Классический ролл с охлаждённым лососем. Подается с соевым соусом, васаби и имбирём.</p>
                             <div class="price-add">
                                 <span class="price">355 руб</span>
-                                <button class="add-btn" onclick="addToCart('roll3', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('roll3', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('roll4')">
                         <img src="../res/images/roll4.jpg" alt="Ролл с Тунцом">
                         <div class="product-info">
                             <h3>Ролл с Тунцом</h3>
                             <p class="description">110г 8 кусочков: Классический ролл с тунцом. Подается с соевым соусом, васаби и имбирём.</p>
                             <div class="price-add">
                                 <span class="price">323 руб</span>
-                                <button class="add-btn" onclick="addToCart('roll4', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('roll4', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('roll5')">
                         <img src="../res/images/roll5.jpg" alt="Ролл с Креветкой">
                         <div class="product-info">
                             <h3>Ролл с Креветкой</h3>
                             <p class="description">110г 8 кусочков: Классический ролл с тигровыми креветками. Подается с соевым соусом, васаби и имбирём.</p>
                             <div class="price-add">
                                 <span class="price">307 руб</span>
-                                <button class="add-btn" onclick="addToCart('roll5', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('roll5', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -302,7 +302,7 @@
              <section id="hot-rolls" class="menu-category-section">
                 <h2 class="category-title">Горячие роллы</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('hot-roll1')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll1.jpg" alt="Ролл Ацуй">
                         </div>
@@ -311,11 +311,11 @@
                             <p class="description">Темпура ролл с лососем, угрём, копчёным беконом и сыром моцарелла 200г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.</p>
                             <div class="price-add">
                                 <span class="price">565 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot-roll1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot-roll1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('hot-roll2')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll2.jpg" alt="Ролл Темпура с лососем">
                         </div>
@@ -324,11 +324,11 @@
                             <p class="description">Темпура ролл с лососем, сливочным сыром, огурцом, зелёным луком и икрой масаго под ореховым соусом и унаги 230г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.</p>
                             <div class="price-add">
                                 <span class="price">535 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot-roll2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot-roll2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('hot-roll3')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll3.jpg" alt="Ролл Кунашир">
                         </div>
@@ -337,11 +337,11 @@
                             <p class="description">Темпура ролл с лососем, тунцом, тигровыми креветками, кальмаром и икрой масаго 200г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.</p>
                             <div class="price-add">
                                 <span class="price">497 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot-roll3', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot-roll3', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('hot-roll4')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll4.jpg" alt="Ролл Темпура краш">
                         </div>
@@ -350,12 +350,11 @@
                             <p class="description">Темпура ролл с овощами и сливочным сыром под шапкой из крабового тартара, лука фри и зелёного лука с сырным соусом и унаги 300г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.</p>
                             <div class="price-add">
                                 <span class="price">487 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot-roll4', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot-roll4', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('hot-roll5')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll5.jpg" alt="Ролл Горячий цезарь">
                         </div>
@@ -364,7 +363,7 @@
                             <p class="description">Темпура ролл с куриным филе, томатом, листьями салата и соусом цезарь 200г. Подаётся с пикантным соусом спайс. Соевый соус, васаби или имбирь можно приобрести отдельно.</p>
                             <div class="price-add">
                                 <span class="price">425 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot-roll5', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot-roll5', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -375,7 +374,7 @@
             <section id="pizza" class="menu-category-section">
                 <h2 class="category-title">Пицца</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('pizza1')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza1.jpg" alt="Пицца Маргарита">
                         </div>
@@ -384,24 +383,24 @@
                             <p class="description">Увеличенная порция моцареллы, томаты, итальянские травы, фирменный томатный соус. 30 см, 590 г.</p>
                             <div class="price-add">
                                 <span class="price">740 руб</span>
-                                <button class="add-btn" onclick="addToCart('pizza1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('pizza1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('pizza2')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza2.jpg" alt="Пицца Пепперони">
                         </div>
                         <div class="product-info">
                             <h3>Пицца "Пепперони"</h3>
-                            <p class="description">Пикантная пепперони, увеличенная порция моцареллы, фирменный томатный соус. 30 см, 550 г</p>
+                            <p class="description">Пикантная пепперони, увеличенная порция моцареллы, фирменный томатный соус. 30 см, 550 г.</p>
                             <div class="price-add">
                                 <span class="price">750 руб</span>
-                                <button class="add-btn" onclick="addToCart('pizza2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('pizza2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('pizza3')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza3.jpg" alt="Пицца Карбонара">
                         </div>
@@ -410,11 +409,11 @@
                             <p class="description">Бекон, сыры чеддер и пармезан, моцарелла, томаты, красный лук, чеснок, фирменный соус альфредо, итальянские травы. 30 см, 590 г.</p>
                             <div class="price-add">
                                 <span class="price">919 руб</span>
-                                <button class="add-btn" onclick="addToCart('pizza3', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('pizza3', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('pizza4')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza4.jpg" alt="Пицца Песто">
                         </div>
@@ -423,11 +422,11 @@
                             <p class="description">Цыпленок, соус песто, кубики брынзы, томаты, моцарелла, фирменный соус альфредо. 30 см, 610 г.</p>
                             <div class="price-add">
                                 <span class="price">819 руб</span>
-                                <button class="add-btn" onclick="addToCart('pizza4', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('pizza4', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('pizza5')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza5.jpg" alt="Пицца Сырный цыпленок">
                         </div>
@@ -436,7 +435,7 @@
                             <p class="description">Цыпленок, моцарелла, сыры чеддер и пармезан, сырный соус, томаты, фирменный соус альфредо, чеснок. 30 см, 620 г.</p>
                             <div class="price-add">
                                 <span class="price">839 руб</span>
-                                <button class="add-btn" onclick="addToCart('pizza5', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('pizza5', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -447,7 +446,7 @@
              <section id="poke" class="menu-category-section">
                 <h2 class="category-title">Поке</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('poke1')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/poke1.jpg" alt="Поке с тигровыми креветками и битыми огурцами">
                         </div>
@@ -456,11 +455,11 @@
                             <p class="description">Поке с натуральным соусом, сочными тигровыми креветками и полезным салатом чука, пряными битыми огурцами, душистым корнем имбиря и свежими помидорами черри.</p>
                             <div class="price-add">
                                 <span class="price">490 руб</span>
-                                <button class="add-btn" onclick="addToCart('poke1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('poke1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('poke2')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/poke2.jpg" alt="Поке с тигровыми креветками и командорским кальмаром">
                         </div>
@@ -469,7 +468,7 @@
                             <p class="description">Поке с натуральным соусом, тигровыми креветками и командорским кальмаром, пряными битыми огурцами, душистым корнем имбиря, свежими помидорами черри.</p>
                             <div class="price-add">
                                 <span class="price">540 руб</span>
-                                <button class="add-btn" onclick="addToCart('poke2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('poke2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -480,7 +479,7 @@
              <section id="hot" class="menu-category-section">
                 <h2 class="category-title">Горячее</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('hot1')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot1.jpg" alt="Торидон">
                         </div>
@@ -489,11 +488,11 @@
                             <p class="description">295г Маринованный цыплёнок в хрустящей панировке, подаётся на рисе с салатом айсберг, эдамамэ, нори и соусом терияки, соусом чиммай и соусом сладкий чили.</p>
                             <div class="price-add">
                                 <span class="price">453 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                     <div class="product-card" onclick="openProductModal('hot2')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot2.jpg" alt="Гёдза с креветкой 6 шт.">
                         </div>
@@ -502,12 +501,11 @@
                             <p class="description">100/30г Японские пельмени с тигровыми креветками, капустой, кунжутным маслом и свежей зеленью, под фирменным соусом никкей с долькой лимона.</p>
                             <div class="price-add">
                                 <span class="price">513 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('hot3')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot3.jpg" alt="Томагояки">
                         </div>
@@ -516,7 +514,7 @@
                             <p class="description">290г Блюдо на каждый день, в котором поджаренная куриная грудка с рисом, болтуньей, салатом айсберг и хрустящим луком фри, заправлены соусом унаги и ореховым соусом, а зелёный лук, томаты черри, кунжут и фирменный соус гармонично дополняют вкус блюда.</p>
                             <div class="price-add">
                                 <span class="price">453 руб</span>
-                                <button class="add-btn" onclick="addToCart('hot3', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('hot3', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -527,7 +525,7 @@
              <section id="dessert" class="menu-category-section">
                 <h2 class="category-title">Десерт</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('dessert1')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/dessert1.jpg" alt="Чизкейк Нью-Йорк">
                         </div>
@@ -536,11 +534,11 @@
                             <p class="description">Чизкейк нью-йорк с топпингом на выбор 125г.</p>
                             <div class="price-add">
                                 <span class="price">295 руб</span>
-                                <button class="add-btn" onclick="addToCart('dessert1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('dessert1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('dessert2')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/dessert2.jpg" alt="Карамельный чизкейк">
                         </div>
@@ -549,7 +547,7 @@
                             <p class="description">Сливочный десерт с очень карамельной начинкой, шоколадным печеньем и орехами, 100 г.</p>
                             <div class="price-add">
                                 <span class="price">350 руб</span>
-                                <button class="add-btn" onclick="addToCart('dessert2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('dessert2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -560,7 +558,7 @@
              <section id="drinks" class="menu-category-section">
                 <h2 class="category-title">Напитки</h2>
                 <div class="product-grid">
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('drink1')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink1.jpg" alt="Сок Rich Вишня">
                         </div>
@@ -569,11 +567,11 @@
                             <p class="description">Сок Рич 200мл на выбор.</p>
                             <div class="price-add">
                                 <span class="price">200 руб</span>
-                                <button class="add-btn" onclick="addToCart('drink1', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('drink1', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('drink2')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink2.jpg" alt="Сок Rich Персик">
                         </div>
@@ -582,11 +580,11 @@
                             <p class="description">Сок Рич 200мл на выбор.</p>
                             <div class="price-add">
                                 <span class="price">200 руб</span>
-                                <button class="add-btn" onclick="addToCart('drink2', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('drink2', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('drink3')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink3.jpg" alt="Сок Rich Яблоко">
                         </div>
@@ -595,11 +593,11 @@
                             <p class="description">Сок Рич 200мл на выбор.</p>
                             <div class="price-add">
                                 <span class="price">200 руб</span>
-                                <button class="add-btn" onclick="addToCart('drink3', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('drink3', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductModal('drink4')">
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink4.jpg" alt="Сок Rich Апельсин">
                         </div>
@@ -608,7 +606,7 @@
                             <p class="description">Сок Рич 200мл на выбор.</p>
                             <div class="price-add">
                                 <span class="price">200 руб</span>
-                                <button class="add-btn" onclick="addToCart('drink4', event)">+</button>
+                                <button class="add-btn" onclick="addToCart('drink4', event); event.stopPropagation()">+</button>
                             </div>
                         </div>
                     </div>
@@ -628,5 +626,15 @@
     </footer>
 
     <script src="../js/main.js"></script>
+
+    <!-- Модальное окно товара -->
+     <div class="product-modal" id="productModal">
+        <div class="product-modal-content">
+            <button class="product-modal-close" onclick="closeProductModal()">&times;</button>
+            <div class="product-modal-body" id="productModalBody">
+           
+        </div>
+    </div>
+</div>
 </body>
 </html>
