@@ -17,6 +17,8 @@
 //! Product service main struct declaration.
 
 // TODO: handle product category.
+// TODO: add get_all_categories() method.
+// TODO: add get_products_list_by_category() method.
 
 use crate::{repository::ProductRepository, product::Product};
 use std::{fs::File, path::Path};
@@ -26,6 +28,8 @@ use sqlx::SqlitePool;
 pub struct ProductService {
     /// Struct for communicating with database.
     repository: ProductRepository,
+    // TODO: create struct for communicating with database for product category.
+    // category_repository: CategoryRepository,
 }
 
 impl ProductService {
@@ -168,11 +172,16 @@ mod tests {
     #[actix_web::test]
     async fn test_update_product_correct() {
         let service = setup_product_service().await;
-        let product_id = 1;
+        let result  = service.create_product(Product::default()).await;
+
+        assert!(result.is_ok(), "Error to create product: {:#?}", result);
+
+        let product_id = result.unwrap();
 
         // Fill product info.
         let product = Product {
             product_id,
+            category_id: 0,
             name: "PC".to_string(),
             description: "Cool PC 10/10".to_string(),
             price: 9999,

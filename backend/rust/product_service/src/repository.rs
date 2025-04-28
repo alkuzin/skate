@@ -40,6 +40,7 @@ impl ProductRepository {
             r#"
             CREATE TABLE IF NOT EXISTS Products (
                 product_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+                category_id INTEGER NOT NULL,
                 name        TEXT NOT NULL,
                 description TEXT NOT NULL,
                 price       INTEGER NOT NULL,
@@ -67,13 +68,14 @@ impl ProductRepository {
         let query =
             r#"
             INSERT INTO Products
-            (name, description, price, quantity, image)
-            VALUES (?, ?, ?, ?, ?)
+            (category_id, name, description, price, quantity, image)
+            VALUES (?, ?, ?, ?, ?, ?)
             RETURNING product_id;
             "#;
 
         // Insert the new product into the database.
         let row: (i64,) = sqlx::query_as(query)
+            .bind(&product.category_id)
             .bind(&product.name)
             .bind(&product.description)
             .bind(&product.price)
@@ -99,7 +101,8 @@ impl ProductRepository {
         // Get product DTO.
         let query =
             r#"
-            SELECT product_id, name, description, price, quantity, image
+            SELECT product_id, category_id, name, description, price, quantity,
+            image
             FROM Products
             WHERE product_id = ?
             "#;
@@ -128,6 +131,7 @@ impl ProductRepository {
             r#"
             UPDATE Products
             SET
+                category_id = ?,
                 name = ?,
                 description = ?,
                 price = ?,
@@ -138,6 +142,7 @@ impl ProductRepository {
 
         // Insert the new product into the database.
         let result = sqlx::query(query)
+            .bind(&product.category_id)
             .bind(&product.name)
             .bind(&product.description)
             .bind(&product.price)
@@ -183,7 +188,8 @@ impl ProductRepository {
     pub async fn get_all_products(&self) -> Result<Vec<Product>, sqlx::Error> {
         let query =
             r#"
-            SELECT product_id, name, description, price, quantity, image
+            SELECT product_id, category_id, name, description, price, quantity,
+            image
             FROM Products;
             "#;
 

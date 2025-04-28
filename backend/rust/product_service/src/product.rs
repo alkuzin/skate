@@ -23,6 +23,8 @@ use sqlx::FromRow;
 pub struct Product {
     /// Product identifier.
     pub product_id: i64,
+    /// Product category identifier.
+    pub category_id: i64,
     /// Product name.
     pub name: String,
     /// Product description.
