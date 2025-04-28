@@ -78,6 +78,7 @@ impl ProductRepository {
             .bind(&product.description)
             .bind(&product.price)
             .bind(&product.quantity)
+            .bind(&product.image)
             .fetch_one(&self.pool)
             .await?;
 
@@ -109,5 +110,48 @@ impl ProductRepository {
             .await?;
 
         Ok(product)
+    }
+
+    /// Update product in database.
+    ///
+    /// # Parameters
+    /// - `id`      - given product identifier.
+    /// - `product` - given product info struct.
+    ///
+    /// # Returns
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn update(&self, id: i64, product: Product)
+        -> Result<(), sqlx::Error>
+    {
+        let query =
+            r#"
+            UPDATE Products
+            SET
+                name = ?,
+                description = ?,
+                price = ?,
+                quantity = ?,
+                image = ?
+            WHERE product_id = ?
+            "#;
+
+        // Insert the new product into the database.
+        let result = sqlx::query(query)
+            .bind(&product.name)
+            .bind(&product.description)
+            .bind(&product.price)
+            .bind(&product.quantity)
+            .bind(&product.image)
+            .bind(&id)
+            .execute(&self.pool)
+            .await?;
+
+        // Handle incorrect product ID.
+        if result.rows_affected() == 0 {
+            return Err(sqlx::Error::RowNotFound);
+        }
+
+        Ok(())
     }
 }
