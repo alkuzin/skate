@@ -33,7 +33,7 @@ impl OrderService {
     /// - `path` - given database path.
     ///
     /// # Returns
-    /// - New `OrderRepository` object - in case of success.
+    /// - New `OrderService` object - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn new(path: &str) -> Result<Self, sqlx::Error> {
         // Check whether database file is exist.
@@ -161,8 +161,12 @@ mod tests {
 
     #[actix_web::test]
     async fn test_update_order_correct() {
-        let service  = setup_order_service().await;
-        let order_id = 1;
+        let service = setup_order_service().await;
+        let result  = service.create_order(Order::default()).await;
+
+        assert!(result.is_ok(), "Error to create order: {:#?}", result);
+
+        let order_id = result.unwrap();
 
         // Fill order info.
         let order_dto = OrderDTO {
@@ -217,7 +221,7 @@ mod tests {
     }
 
     #[actix_web::test]
-    async fn test_get_order_list_correct() {
+    async fn test_get_order_list() {
         let service = setup_order_service().await;
         let result  = service.get_order_list().await;
 
