@@ -16,8 +16,6 @@
 
 //! Product service main struct declaration.
 
-// TODO: add get_products_list_by_category() method.
-
 use crate::{
     product_repository::ProductRepository,
     category_repository::CategoryRepository,
@@ -185,6 +183,20 @@ impl ProductService {
         -> Result<Vec<Category>, sqlx::Error>
     {
         self.category_repository.get_all_categories().await
+    }
+
+    /// Get list of products associated to specific product category.
+    ///
+    /// # Parameters
+    /// - `id` - given product category identifier.
+    ///
+    /// # Returns
+    /// - List of product info - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_products_by_category(&self, id: i64)
+        -> Result<Vec<Product>, sqlx::Error>
+    {
+        self.product_repository.find_by_category(id).await
     }
 }
 
