@@ -104,6 +104,15 @@ impl ProductService {
     pub async fn delete_product(&self, id: i64) -> Result<(), sqlx::Error> {
         self.repository.delete(id).await
     }
+
+    /// Get list of all products.
+    ///
+    /// # Returns
+    /// - List of product info - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_product_list(&self) -> Result<Vec<Product>, sqlx::Error> {
+        self.repository.get_all_products().await
+    }
 }
 
 #[cfg(test)]
