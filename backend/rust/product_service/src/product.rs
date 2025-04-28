@@ -36,3 +36,14 @@ pub struct Product {
     /// Image path.
     pub image: String,
 }
+
+/// Product category info struct.
+#[derive(Debug, Default, FromRow)]
+pub struct Category {
+    /// Product category identifier.
+    pub category_id: i64,
+    /// Product category name.
+    pub name: String,
+    /// Image path.
+    pub image: String,
+}
