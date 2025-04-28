@@ -16,7 +16,7 @@
 
 //! Product service integration tests main module.
 
-use product_service::{service::ProductService, config, create_product, create_category, get_product, get_category};
+use product_service::{service::ProductService, config, create_product, create_category, get_product, get_category, update_product, update_category};
 use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
 use product_service::product::{Category, Product};
@@ -91,7 +91,7 @@ async fn test_create_category() {
     ).await;
 
     let category = json!({
-        "category_id" : 1234,
+        "category_id" : 0,
         "name"        : "Books",
         "image"       : "~/images/category-book.png",
     });
@@ -199,4 +199,82 @@ async fn test_get_category() {
     else {
         eprintln!("Error to parse product category");
     }
+}
+
+#[actix_web::test]
+async fn test_update_product() {
+    // Create a test app with the service.
+    let service = setup_product_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/products/{id}", web::put().to(update_product))
+    ).await;
+
+    let product = json!({
+        "product_id"  :  0,
+        "category_id" : 5678,
+        "name"        : "Magnificent book",
+        "description" : "Magnificent book 100/10",
+        "price"       : 9999999,
+        "quantity"    : 1,
+        "image"       : "~/images/magnificent-book.png",
+    });
+
+    let product_id = 1;
+
+    // Send a PUT request to the /products/{id} endpoint.
+    let req = test::TestRequest::put()
+        .uri(&format!("/products/{}", product_id))
+        .set_json(&product)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+}
+
+#[actix_web::test]
+async fn test_update_category() {
+    // Create a test app with the service.
+    let service = setup_product_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/categories/{id}", web::put().to(update_category))
+    ).await;
+
+    let category = json!({
+        "category_id" : 0,
+        "name"        : "Tech",
+        "image"       : "~/images/category-tech.png",
+    });
+
+    let category_id = 1;
+
+    // Send a PUT request to the /products/{id} endpoint.
+    let req = test::TestRequest::put()
+        .uri(&format!("/categories/{}", category_id))
+        .set_json(&category)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
 }
