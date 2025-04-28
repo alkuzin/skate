@@ -174,4 +174,25 @@ impl ProductRepository {
 
         Ok(())
     }
+
+    /// Get all products from database.
+    ///
+    /// # Returns
+    /// - List of product info - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_all_products(&self) -> Result<Vec<Product>, sqlx::Error> {
+        let query =
+            r#"
+            SELECT product_id, name, description, price, quantity, image
+            FROM Products;
+            "#;
+
+        let rows = sqlx::query_as::<_, Product>(query)
+            .fetch_all(&self.pool)
+            .await?;
+
+        let products: Vec<Product> = rows.into_iter().collect();
+
+        Ok(products)
+    }
 }
