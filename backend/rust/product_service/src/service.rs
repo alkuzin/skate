@@ -73,7 +73,7 @@ impl ProductService {
     /// - Product info - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn get_product(&self, id: i64) -> Result<Product, sqlx::Error> {
-        todo!()
+        self.repository.find_by_id(id).await
     }
 
     /// Update product info.
