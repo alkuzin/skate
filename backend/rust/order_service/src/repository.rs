@@ -238,41 +238,6 @@ impl OrderRepository {
         Ok(())
     }
 
-    /// Find all orders info by customer ID in database.
-    ///
-    /// # Parameters
-    /// - `customer_id` - given order customer identifier.
-    ///
-    /// # Returns
-    /// - `List of order info` - in case of success.
-    /// - `SQLx error`         - otherwise.
-    pub async fn find_all_by_customer_id(&self, customer_id: i64)
-        -> Result<Vec<Order>, sqlx::Error>
-    {
-        let query =
-            r#"
-            SELECT (order_id, customer_id, order_status, address, price)
-            FROM Orders
-            WHERE customer_id = ?
-            "#;
-
-        let rows = sqlx::query_as::<_, OrderDTO>(query)
-            .bind(customer_id)
-            .fetch_all(&self.pool)
-            .await?;
-
-        let orders_dto: Vec<OrderDTO> = rows.into_iter().collect();
-        let mut orders: Vec<Order> = Vec::with_capacity(orders_dto.len());
-
-        // Find all products associated with orders_dto.
-        for order_dto in orders_dto {
-            let items = self.get_order_items_by_id(order_dto.order_id).await?;
-            orders.push(Order::new(order_dto, items));
-        }
-
-        Ok(orders)
-    }
-
     /// Get all orders from database.
     ///
     /// # Returns
