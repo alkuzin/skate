@@ -190,4 +190,25 @@ mod tests {
 
         assert!(result.is_err(), "Should return error");
     }
+
+    #[actix_web::test]
+    async fn test_delete_product_correct() {
+        let service = setup_product_service().await;
+        let result  = service.create_product(Product::default()).await;
+        assert!(result.is_ok(), "Error to create product: {:#?}", result);
+
+        let product_id = result.unwrap();
+        let result     = service.delete_product(product_id).await;
+        assert!(result.is_ok(), "Error to delete product: {:#?}", result);
+
+        println!("Deleted product with ID: {}", product_id);
+    }
+
+    #[actix_web::test]
+    async fn test_delete_product_incorrect() {
+        let service = setup_product_service().await;
+        let result  = service.delete_product(0).await;
+
+        assert!(result.is_err(), "Should return error");
+    }
 }
