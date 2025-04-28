@@ -16,6 +16,7 @@
 
 //! Product repository declaration.
 
+use crate::product::Product;
 use sqlx::sqlite::SqlitePool;
 
 /// Struct for communicating with database.
@@ -43,7 +44,7 @@ impl ProductRepository {
                 description TEXT NOT NULL,
                 price       INTEGER NOT NULL,
                 quantity    INTEGER NOT NULL,
-                image       TEXT NOT NULL
+                image       TEXT
             );
             "#;
 
@@ -53,4 +54,36 @@ impl ProductRepository {
 
         Self { pool }
     }
+
+    /// Save product in database.
+    ///
+    /// # Parameters
+    /// - `product` - given product info struct.
+    ///
+    /// # Returns
+    /// - Product ID   - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn save(&self, product: Product) -> Result<i64, sqlx::Error> {
+        let query =
+            r#"
+            INSERT INTO Products
+            (name, description, price, quantity, image)
+            VALUES (?, ?, ?, ?, ?)
+            RETURNING product_id;
+            "#;
+
+        // Insert the new product into the database.
+        let row: (i64,) = sqlx::query_as(query)
+            .bind(&product.name)
+            .bind(&product.description)
+            .bind(&product.price)
+            .bind(&product.quantity)
+            .fetch_one(&self.pool)
+            .await?;
+
+        let product_id = row.0;
+
+        Ok(product_id)
+    }
+
 }
