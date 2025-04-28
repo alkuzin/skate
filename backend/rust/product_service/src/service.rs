@@ -16,18 +16,15 @@
 
 //! Product service main struct declaration.
 
-// TODO: handle product category.
-// TODO: add get_all_categories() method.
 // TODO: add get_products_list_by_category() method.
 
 use crate::{
     product_repository::ProductRepository,
     category_repository::CategoryRepository,
-    product::Product
+    product::{Product, Category}
 };
 use std::{fs::File, path::Path};
 use sqlx::SqlitePool;
-use crate::product::Category;
 
 #[derive(Debug, Clone)]
 pub struct ProductService {
@@ -184,7 +181,7 @@ impl ProductService {
     /// # Returns
     /// - List of product categories info - in case of success.
     /// - `SQLx error` - otherwise.
-    pub async fn get_categories_list(&self)
+    pub async fn get_category_list(&self)
         -> Result<Vec<Category>, sqlx::Error>
     {
         self.category_repository.get_all_categories().await
@@ -320,5 +317,109 @@ mod tests {
     }
 
     // Tests for category repository related methods.
-    // TODO:
+
+    #[actix_web::test]
+    async fn test_create_category() {
+        let service = setup_product_service().await;
+        let result  = service.create_category(Category::default()).await;
+
+        assert!(result.is_ok(), "Error to create category: {:#?}", result);
+
+        let category_id = result.unwrap();
+        println!("Created category with ID: {}", category_id);
+    }
+
+    #[actix_web::test]
+    async fn test_get_category_correct() {
+        let service = setup_product_service().await;
+        let result  = service.create_category(Category::default()).await;
+        assert!(result.is_ok(), "Error to create category: {:#?}", result);
+
+        let category_id = result.unwrap();
+        let result     = service.get_category(category_id).await;
+        assert!(result.is_ok(), "Error to get category info: {:#?}", result);
+
+        let category = result.unwrap();
+        println!("Get category info with ID {}: {:#?}", category_id, category);
+    }
+
+    #[actix_web::test]
+    async fn test_get_category_incorrect() {
+        let service = setup_product_service().await;
+        let result  = service.get_category(0).await;
+
+        assert!(result.is_err(), "Should return error: {:#?}", result);
+    }
+
+    #[actix_web::test]
+    async fn test_update_category_correct() {
+        let service = setup_product_service().await;
+        let result  = service.create_category(Category::default()).await;
+
+        assert!(result.is_ok(), "Error to create category: {:#?}", result);
+
+        let category_id = result.unwrap();
+
+        // Fill category info.
+        let category = Category {
+            category_id,
+            name: "Tech".to_string(),
+            image: "~/images/tech.png".to_string(),
+        };
+
+        // Try update category info.
+        let result = service.update_category(category_id, category).await;
+        assert!(result.is_ok(), "Error to update category info: {:#?}", result);
+
+        // Try get updated category info.
+        let result = service.get_category(category_id).await;
+        assert!(result.is_ok(), "Error to get category info: {:#?}", result);
+
+        let category = result.unwrap();
+        println!("Updated category info with ID {}: {:#?}", category_id, category);
+    }
+
+    #[actix_web::test]
+    async fn test_update_category_incorrect() {
+        let service = setup_product_service().await;
+        let result  = service.update_category(0, Category::default()).await;
+
+        assert!(result.is_err(), "Should return error");
+    }
+
+    #[actix_web::test]
+    async fn test_delete_category_correct() {
+        let service = setup_product_service().await;
+        let result  = service.create_category(Category::default()).await;
+        assert!(result.is_ok(), "Error to create category: {:#?}", result);
+
+        let category_id = result.unwrap();
+        let result      = service.delete_category(category_id).await;
+        assert!(result.is_ok(), "Error to delete category: {:#?}", result);
+
+        println!("Deleted category with ID: {}", category_id);
+    }
+
+    #[actix_web::test]
+    async fn test_delete_category_incorrect() {
+        let service = setup_product_service().await;
+        let result  = service.delete_category(0).await;
+
+        assert!(result.is_err(), "Should return error");
+    }
+
+    #[actix_web::test]
+    async fn test_get_category_list() {
+        let service = setup_product_service().await;
+        let result  = service.get_category_list().await;
+
+        assert!(result.is_ok(), "Error to get list of categories: {:#?}", result);
+
+        let category_list = result.unwrap();
+        println!("Category list with {} categories:", category_list.len());
+
+        for (i, category) in category_list.iter().enumerate() {
+            println!("Category ({}): {:?}", i, category);
+        }
+    }
 }
