@@ -64,8 +64,8 @@ impl CategoryRepository {
         let query =
             r#"
             INSERT INTO Categories
-            (category_id, name, image)
-            VALUES (?, ?, ?)
+            (name, image)
+            VALUES (?, ?)
             RETURNING category_id;
             "#;
 
