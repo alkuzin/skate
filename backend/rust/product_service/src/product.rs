@@ -17,9 +17,10 @@
 //! Product related declarations.
 
 use sqlx::FromRow;
+use serde::{Deserialize, Serialize};
 
 /// Product info struct.
-#[derive(Debug, Default, FromRow)]
+#[derive(Debug, Default, FromRow, Serialize, Deserialize)]
 pub struct Product {
     /// Product identifier.
     pub product_id: i64,
@@ -38,7 +39,7 @@ pub struct Product {
 }
 
 /// Product category info struct.
-#[derive(Debug, Default, FromRow)]
+#[derive(Debug, Default, FromRow, Serialize, Deserialize)]
 pub struct Category {
     /// Product category identifier.
     pub category_id: i64,

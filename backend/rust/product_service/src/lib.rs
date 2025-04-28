@@ -16,8 +16,31 @@
 
 //! Product service main module.
 
+use actix_web::{HttpResponse, Responder};
+use actix_web::web::{Data, Json};
+use crate::product::Product;
+use crate::service::ProductService;
+
 pub mod category_repository;
 pub mod product_repository;
 pub mod service;
 pub mod product;
 pub mod config;
+
+/// Create new order.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `order`   - given details of the product to be created.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn create_product(service: Data<ProductService>, order: Json<Product>)
+    -> impl Responder
+{
+    match service.create_product(order.0).await {
+        Ok(order_id) => HttpResponse::Created().json(order_id),
+        Err(e)       => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
