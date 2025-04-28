@@ -16,7 +16,12 @@
 
 //! Product service entry point.
 
-use product_service::{config, create_category, create_product, delete_category, delete_product, get_category, get_category_list, get_product, get_product_list, get_products_by_category, service::ProductService, update_category, update_product};
+use product_service::{
+    config, service::ProductService, create_category, create_product,
+    delete_category, delete_product, get_category, get_category_list,
+    get_product, get_product_list, get_products_by_category, update_category,
+    update_product
+};
 use actix_web::{web, web::Data, App, HttpServer};
 use std::error::Error;
 
@@ -31,17 +36,20 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let _ = HttpServer::new(move || {
         App::new()
             .app_data(Data::new(service.clone()))
-            .route("/products",         web::post().to(create_product))
-            .route("/categories",       web::post().to(create_category))
-            .route("/products/{id}",    web::get().to(get_product))
-            .route("/categories/{id}",  web::get().to(get_category))
-            .route("/products/{id}",    web::put().to(update_product))
-            .route("/categories/{id}",  web::put().to(update_category))
-            .route("/products/{id}",    web::delete().to(delete_product))
-            .route("/categories/{id}",  web::delete().to(delete_category))
-            .route("/products",         web::get().to(get_product_list))
-            .route("/categories",       web::get().to(get_category_list))
-            .route("/categories/{id}/products", web::get().to(get_products_by_category))
+            .route("/products", web::post().to(create_product))
+            .route("/categories", web::post().to(create_category))
+            .route("/products/{id}", web::get().to(get_product))
+            .route("/categories/{id}", web::get().to(get_category))
+            .route("/products/{id}", web::put().to(update_product))
+            .route("/categories/{id}", web::put().to(update_category))
+            .route("/products/{id}", web::delete().to(delete_product))
+            .route("/categories/{id}", web::delete().to(delete_category))
+            .route("/products", web::get().to(get_product_list))
+            .route("/categories", web::get().to(get_category_list))
+            .route(
+                "/categories/{id}/products",
+                web::get().to(get_products_by_category)
+            )
     })
         .bind(config::BIND_ADDRESS)?
         .run()

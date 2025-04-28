@@ -17,9 +17,9 @@
 //! Product service integration tests main module.
 
 use product_service::{
-    create_product, create_category, get_product, get_category, update_product, update_category,
-    delete_product, delete_category, get_product_list, get_category_list,
-    service::ProductService, config, product::{Category, Product}
+    service::ProductService, config, product::{Category, Product}, create_product, create_category,
+    get_product, get_category, update_product, update_category, delete_product, delete_category,
+    get_product_list, get_category_list, get_products_by_category
 };
 use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
@@ -485,5 +485,48 @@ async fn test_get_category_list() {
     }
     else {
         eprintln!("Error to parse category");
+    }
+}
+
+#[actix_web::test]
+async fn test_get_products_by_category() {
+    // Create a test app with the service.
+    let service = setup_product_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/categories/{id}/products", web::get().to(get_products_by_category))
+    ).await;
+
+    let category_id = 1234;
+
+    // Send a GET request to the /categories/{id}/products endpoint.
+    let req = test::TestRequest::get()
+        .uri(format!("/categories/{}/products", category_id).as_str())
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+
+    if let Ok(products_list) = serde_json::from_str::<Vec<Category>>(
+        body_string.into_owned().as_str()
+    ) {
+        println!("Product list with {} products:", products_list.len());
+
+        for (i, products) in products_list.iter().enumerate() {
+            println!("Products ({}): {:?}", i, products);
+        }
+    }
+    else {
+        eprintln!("Error to parse products");
     }
 }
