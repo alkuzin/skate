@@ -102,7 +102,7 @@ impl ProductService {
     /// - `Ok`         - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn delete_product(&self, id: i64) -> Result<(), sqlx::Error> {
-        todo!()
+        self.repository.delete(id).await
     }
 }
 
