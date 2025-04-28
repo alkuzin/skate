@@ -16,7 +16,7 @@
 
 //! Product service integration tests main module.
 
-use product_service::{service::ProductService, config, create_product};
+use product_service::{service::ProductService, config, create_product, create_category};
 use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
 
@@ -78,3 +78,44 @@ async fn test_create_product() {
     }
 }
 
+#[actix_web::test]
+async fn test_create_category() {
+    // Create a test app with the service.
+    let service = setup_product_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/categories", web::post().to(create_category))
+    ).await;
+
+    let category = json!({
+        "category_id" : 1234,
+        "name"        : "Books",
+        "image"       : "~/images/category-book.png",
+    });
+
+    // Send a POST request to the /categories endpoint.
+    let req = test::TestRequest::post()
+        .uri("/categories")
+        .set_json(&category)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+
+    if let Ok(id) = body_string.trim().parse::<i64>() {
+        println!("Created category with ID: {}", id);
+    }
+    else {
+        eprintln!("Error to parse category ID");
+    }
+}
