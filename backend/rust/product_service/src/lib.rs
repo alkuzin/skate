@@ -97,3 +97,41 @@ pub async fn get_category(service: Data<ProductService>, id: web::Path<i64>)
         Err(e)      => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
+
+/// Update product info.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `id`      - given product identifier.
+/// - `product` - given details of the product to be updated.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn update_product(service: Data<ProductService>, id: web::Path<i64>,
+                            product: Json<Product>) -> impl Responder
+{
+    match service.update_product(id.into_inner(), product.0).await {
+        Ok(_)  => HttpResponse::Created().body("Ok"),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Update category info.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `id`      - given product category identifier.
+/// - `product` - given details of the product category to be updated.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn update_category(service: Data<ProductService>, id: web::Path<i64>,
+                            category: Json<Category>) -> impl Responder
+{
+    match service.update_category(id.into_inner(), category.0).await {
+        Ok(_)  => HttpResponse::Created().body("Ok"),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}

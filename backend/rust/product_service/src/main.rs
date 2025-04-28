@@ -16,7 +16,7 @@
 
 //! Product service entry point.
 
-use product_service::{config, create_category, create_product, get_category, get_product, service::ProductService};
+use product_service::{config, create_category, create_product, get_category, get_product, service::ProductService, update_category, update_product};
 use actix_web::{web, web::Data, App, HttpServer};
 use std::error::Error;
 
@@ -35,6 +35,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             .route("/categories",       web::post().to(create_category))
             .route("/products/{id}",    web::get().to(get_product))
             .route("/categories/{id}",  web::get().to(get_category))
+            .route("/products/{id}",    web::put().to(update_product))
+            .route("/categories/{id}",  web::put().to(update_category))
     })
         .bind(config::BIND_ADDRESS)?
         .run()
