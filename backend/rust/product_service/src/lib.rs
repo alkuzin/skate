@@ -34,12 +34,12 @@ use actix_web::{HttpResponse, Responder, web::{Data, Json}, web};
 /// # Returns
 /// - `HttpResponse::Created` - in case of success.
 /// - `HttpResponse::InternalServerError` - otherwise.
-pub async fn create_product(service: Data<ProductService>, product: Json<Product>)
-    -> impl Responder
+pub async fn create_product(service: Data<ProductService>,
+                            product: Json<Product>) -> impl Responder
 {
     match service.create_product(product.0).await {
         Ok(product_id) => HttpResponse::Created().json(product_id),
-        Err(e)         => HttpResponse::InternalServerError().body(e.to_string()),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
 
@@ -52,12 +52,12 @@ pub async fn create_product(service: Data<ProductService>, product: Json<Product
 /// # Returns
 /// - `HttpResponse::Created` - in case of success.
 /// - `HttpResponse::InternalServerError` - otherwise.
-pub async fn create_category(service: Data<ProductService>, category: Json<Category>)
-    -> impl Responder
+pub async fn create_category(service: Data<ProductService>,
+                             category: Json<Category>) -> impl Responder
 {
     match service.create_category(category.0).await {
         Ok(product_id) => HttpResponse::Created().json(product_id),
-        Err(e)         => HttpResponse::InternalServerError().body(e.to_string()),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
 
@@ -198,6 +198,24 @@ pub async fn get_product_list(service: Data<ProductService>) -> impl Responder
 pub async fn get_category_list(service: Data<ProductService>) -> impl Responder
 {
     match service.get_category_list().await {
+        Ok(products) => HttpResponse::Created().json(products),
+        Err(e)       => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Get product category info list.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `id`      - given product category identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn get_products_by_category(service: Data<ProductService>,
+                                      id: web::Path<i64>) -> impl Responder
+{
+    match service.get_products_by_category(id.into_inner()).await {
         Ok(products) => HttpResponse::Created().json(products),
         Err(e)       => HttpResponse::InternalServerError().body(e.to_string()),
     }
