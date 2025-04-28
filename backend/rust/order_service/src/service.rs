@@ -48,15 +48,6 @@ impl OrderService {
         Ok(Self { repository: OrderRepository::new(pool).await })
     }
 
-    /// Initialize order service.
-    ///
-    /// # Returns
-    /// - `Ok` - in case of success.
-    /// - `SQLx error` - otherwise.
-    pub async fn init(&mut self) -> Result<(), sqlx::Error> {
-        Ok(())
-    }
-
     /// Create new order.
     ///
     /// # Parameters
@@ -124,11 +115,8 @@ mod tests {
     use super::*;
 
     async fn setup_order_service() -> OrderService {
-        let mut service = OrderService::new(config::TEST_DATABASE_PATH).await
+        let service = OrderService::new(config::TEST_DATABASE_PATH).await
             .expect("OrderService::new() should succeed!");
-
-        let _ = service.init().await
-            .expect("OrderService::init() should succeed!");
 
         service
     }

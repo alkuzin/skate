@@ -24,11 +24,8 @@ use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
 
 async fn setup_order_service() -> OrderService {
-    let mut service = OrderService::new(config::TEST_DATABASE_PATH).await
+    let service = OrderService::new(config::TEST_DATABASE_PATH).await
         .expect("OrderService::new() should succeed!");
-
-    let _ = service.init().await
-        .expect("OrderService::init() should succeed!");
 
     service
 }

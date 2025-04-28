@@ -28,8 +28,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("[order-service] Running server");
     println!("[order-service] Connecting database");
 
-    let mut service = OrderService::new(config::DATABASE_PATH).await?;
-    service.init().await?;
+    let service = OrderService::new(config::DATABASE_PATH).await?;
 
     // Run HTTP server.
     let _ = HttpServer::new(move || {
