@@ -79,3 +79,21 @@ pub async fn get_product(service: Data<ProductService>, id: web::Path<i64>)
         Err(e)      => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
+
+/// Get category info.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `id`      - given product category identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn get_category(service: Data<ProductService>, id: web::Path<i64>)
+    -> impl Responder
+{
+    match service.get_category(id.into_inner()).await {
+        Ok(product) => HttpResponse::Created().json(product),
+        Err(e)      => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
