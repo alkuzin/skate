@@ -264,7 +264,7 @@ mod tests {
         // Fill product info.
         let product = Product {
             product_id,
-            category_id: 0,
+            category_id: 42,
             name: "PC".to_string(),
             description: "Cool PC 10/10".to_string(),
             price: 9999,
@@ -432,6 +432,21 @@ mod tests {
 
         for (i, category) in category_list.iter().enumerate() {
             println!("Category ({}): {:?}", i, category);
+        }
+    }
+
+    #[actix_web::test]
+    async fn test_get_products_by_category() {
+        let service = setup_product_service().await;
+        let result  = service.get_products_by_category(42).await;
+
+        assert!(result.is_ok(), "Error to get list of products: {:#?}", result);
+
+        let product_list = result.unwrap();
+        println!("Product list with {} products:", product_list.len());
+
+        for (i, product) in product_list.iter().enumerate() {
+            println!("Product ({}): {:?}", i, product);
         }
     }
 }
