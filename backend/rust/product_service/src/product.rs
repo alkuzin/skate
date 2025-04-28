@@ -16,8 +16,10 @@
 
 //! Product related declarations.
 
+use sqlx::FromRow;
+
 /// Product info struct.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, FromRow)]
 pub struct Product {
     /// Product identifier.
     pub product_id: i64,

@@ -86,4 +86,28 @@ impl ProductRepository {
         Ok(product_id)
     }
 
+    /// Find product info by ID.
+    ///
+    /// # Parameters
+    /// - `id` - given product ID.
+    ///
+    /// # Returns
+    /// - `Product`    - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn find_by_id(&self, id: i64) -> Result<Product, sqlx::Error> {
+        // Get product DTO.
+        let query =
+            r#"
+            SELECT product_id, name, description, price, quantity, image
+            FROM Products
+            WHERE product_id = ?
+            "#;
+
+        let product = sqlx::query_as::<_, Product>(query)
+            .bind(id)
+            .fetch_one(&self.pool)
+            .await?;
+
+        Ok(product)
+    }
 }
