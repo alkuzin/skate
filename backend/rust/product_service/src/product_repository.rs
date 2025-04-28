@@ -98,7 +98,6 @@ impl ProductRepository {
     /// - `Product`    - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn find_by_id(&self, id: i64) -> Result<Product, sqlx::Error> {
-        // Get product DTO.
         let query =
             r#"
             SELECT product_id, category_id, name, description, price, quantity,
@@ -194,6 +193,35 @@ impl ProductRepository {
             "#;
 
         let rows = sqlx::query_as::<_, Product>(query)
+            .fetch_all(&self.pool)
+            .await?;
+
+        let products: Vec<Product> = rows.into_iter().collect();
+
+        Ok(products)
+    }
+
+    /// Find all products by category.
+    ///
+    /// # Parameters
+    /// - `id` - given product category ID.
+    ///
+    /// # Returns
+    /// - List of product info - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn find_by_category(&self, id: i64)
+        -> Result<Vec<Product>, sqlx::Error>
+    {
+        let query =
+            r#"
+            SELECT product_id, category_id, name, description, price, quantity,
+            image
+            FROM Products
+            WHERE category_id = ?
+            "#;
+
+        let rows = sqlx::query_as::<_, Product>(query)
+            .bind(id)
             .fetch_all(&self.pool)
             .await?;
 
