@@ -20,16 +20,20 @@
 // TODO: add get_all_categories() method.
 // TODO: add get_products_list_by_category() method.
 
-use crate::{repository::ProductRepository, product::Product};
+use crate::{
+    product_repository::ProductRepository,
+    category_repository::CategoryRepository,
+    product::Product
+};
 use std::{fs::File, path::Path};
 use sqlx::SqlitePool;
 
 #[derive(Debug, Clone)]
 pub struct ProductService {
-    /// Struct for communicating with database.
-    repository: ProductRepository,
-    // TODO: create struct for communicating with database for product category.
-    // category_repository: CategoryRepository,
+    /// Struct for communicating with products database.
+    product_repository: ProductRepository,
+    /// Struct for communicating with product categories database.
+    category_repository: CategoryRepository,
 }
 
 impl ProductService {
@@ -50,10 +54,13 @@ impl ProductService {
             }
         }
 
-        let pool       = SqlitePool::connect(path).await?;
-        let repository = ProductRepository::new(pool).await;
+        let product_pool        = SqlitePool::connect(path).await?;
+        let product_repository  = ProductRepository::new(product_pool).await;
 
-        Ok(Self { repository })
+        let category_pool       = SqlitePool::connect(path).await?;
+        let category_repository = CategoryRepository::new(category_pool).await;
+
+        Ok(Self { product_repository, category_repository })
     }
 
     /// Create new product.
@@ -67,7 +74,7 @@ impl ProductService {
     pub async fn create_product(&self, product: Product)
         -> Result<i64, sqlx::Error>
     {
-        self.repository.save(product).await
+        self.product_repository.save(product).await
     }
 
     /// Get product info.
@@ -79,7 +86,7 @@ impl ProductService {
     /// - Product info - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn get_product(&self, id: i64) -> Result<Product, sqlx::Error> {
-        self.repository.find_by_id(id).await
+        self.product_repository.find_by_id(id).await
     }
 
     /// Update product info.
@@ -94,7 +101,7 @@ impl ProductService {
     pub async fn update_product(&self, id: i64, product: Product)
         -> Result<(), sqlx::Error>
     {
-        self.repository.update(id, product).await
+        self.product_repository.update(id, product).await
     }
 
     /// Delete product.
@@ -106,7 +113,7 @@ impl ProductService {
     /// - `Ok`         - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn delete_product(&self, id: i64) -> Result<(), sqlx::Error> {
-        self.repository.delete(id).await
+        self.product_repository.delete(id).await
     }
 
     /// Get list of all products.
@@ -115,7 +122,7 @@ impl ProductService {
     /// - List of product info - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn get_product_list(&self) -> Result<Vec<Product>, sqlx::Error> {
-        self.repository.get_all_products().await
+        self.product_repository.get_all_products().await
     }
 }
 

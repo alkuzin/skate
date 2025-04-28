@@ -16,7 +16,8 @@
 
 //! Product service main module.
 
-pub mod repository;
+pub mod category_repository;
+pub mod product_repository;
 pub mod service;
 pub mod product;
 pub mod config;
