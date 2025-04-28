@@ -16,7 +16,7 @@
 
 //! Product service main module.
 
-use actix_web::{HttpResponse, Responder, web::{Data, Json}};
+use actix_web::{HttpResponse, Responder, web::{Data, Json}, web};
 use crate::{service::ProductService, product::Product};
 use crate::product::Category;
 
@@ -59,5 +59,23 @@ pub async fn create_category(service: Data<ProductService>, category: Json<Categ
     match service.create_category(category.0).await {
         Ok(product_id) => HttpResponse::Created().json(product_id),
         Err(e)         => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Get product info.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `id`      - given product identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn get_product(service: Data<ProductService>, id: web::Path<i64>)
+    -> impl Responder
+{
+    match service.get_product(id.into_inner()).await {
+        Ok(product) => HttpResponse::Created().json(product),
+        Err(e)      => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
