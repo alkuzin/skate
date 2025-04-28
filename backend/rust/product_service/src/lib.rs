@@ -16,10 +16,9 @@
 
 //! Product service main module.
 
-use actix_web::{HttpResponse, Responder};
-use actix_web::web::{Data, Json};
-use crate::product::Product;
-use crate::service::ProductService;
+use actix_web::{HttpResponse, Responder, web::{Data, Json}};
+use crate::{service::ProductService, product::Product};
+use crate::product::Category;
 
 pub mod category_repository;
 pub mod product_repository;
@@ -27,20 +26,38 @@ pub mod service;
 pub mod product;
 pub mod config;
 
-/// Create new order.
+/// Create new product.
 ///
 /// # Parameters
 /// - `service` - given product service data wrapper and extractor.
-/// - `order`   - given details of the product to be created.
+/// - `product` - given details of the product to be created.
 ///
 /// # Returns
 /// - `HttpResponse::Created` - in case of success.
 /// - `HttpResponse::InternalServerError` - otherwise.
-pub async fn create_product(service: Data<ProductService>, order: Json<Product>)
+pub async fn create_product(service: Data<ProductService>, product: Json<Product>)
     -> impl Responder
 {
-    match service.create_product(order.0).await {
-        Ok(order_id) => HttpResponse::Created().json(order_id),
-        Err(e)       => HttpResponse::InternalServerError().body(e.to_string()),
+    match service.create_product(product.0).await {
+        Ok(product_id) => HttpResponse::Created().json(product_id),
+        Err(e)         => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Create new category.
+///
+/// # Parameters
+/// - `service`  - given product service data wrapper and extractor.
+/// - `category` - given details of the product category to be created.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn create_category(service: Data<ProductService>, category: Json<Category>)
+    -> impl Responder
+{
+    match service.create_category(category.0).await {
+        Ok(product_id) => HttpResponse::Created().json(product_id),
+        Err(e)         => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
