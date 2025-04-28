@@ -16,13 +16,14 @@
 
 //! Product service main struct declaration.
 
+use crate::repository::ProductRepository;
 use std::{fs::File, path::Path};
 use sqlx::SqlitePool;
 
 #[derive(Debug, Clone)]
 pub struct ProductService {
-    // TODO: add struct for communicating with database.
-    // repository: ProductRepository,
+    /// Struct for communicating with database.
+    repository: ProductRepository,
 }
 
 impl ProductService {
@@ -43,7 +44,8 @@ impl ProductService {
             }
         }
 
-        let _pool = SqlitePool::connect(path).await?;
-        Ok(Self { /* TODO: Init ProductRepository. */ })
+        let pool       = SqlitePool::connect(path).await?;
+        let repository = ProductRepository::new(pool).await;
+        Ok(Self { repository })
     }
 }
