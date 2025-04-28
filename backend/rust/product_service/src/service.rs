@@ -16,7 +16,7 @@
 
 //! Product service main struct declaration.
 
-use crate::repository::ProductRepository;
+use crate::{repository::ProductRepository, product::Product};
 use std::{fs::File, path::Path};
 use sqlx::SqlitePool;
 
@@ -46,6 +46,89 @@ impl ProductService {
 
         let pool       = SqlitePool::connect(path).await?;
         let repository = ProductRepository::new(pool).await;
+
         Ok(Self { repository })
+    }
+
+    /// Create new product.
+    ///
+    /// # Parameters
+    /// - `product` - given product info struct.
+    ///
+    /// # Returns
+    /// - Product ID   - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn create_product(&self, product: Product)
+        -> Result<i64, sqlx::Error>
+    {
+        self.repository.save(product).await
+    }
+
+    /// Get product info.
+    ///
+    /// # Parameters
+    /// - `id` - given product identifier.
+    ///
+    /// # Returns
+    /// - Product info - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_product(&self, id: i64) -> Result<Product, sqlx::Error> {
+        todo!()
+    }
+
+    /// Update product info.
+    ///
+    /// # Parameters
+    /// - `id`      - given product identifier.
+    /// - `product` - given product info struct.
+    ///
+    /// # Returns
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn update_product(&self, id: i64, product: Product)
+        -> Result<(), sqlx::Error>
+    {
+        todo!()
+    }
+
+    /// Delete product.
+    ///
+    /// # Parameters
+    /// - `id` - given product identifier.
+    ///
+    /// # Returns
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn delete_product(&self, id: i64) -> Result<(), sqlx::Error> {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{config, product::Product};
+    use super::*;
+
+    async fn setup_product_service() -> ProductService {
+        let mut service = ProductService::new(config::TEST_DATABASE_PATH).await
+            .expect("ProductService::new() should succeed!");
+
+        service
+    }
+
+    #[actix_web::test]
+    async fn test_setup_product_service() {
+        let _ = setup_product_service();
+    }
+
+    #[actix_web::test]
+    async fn test_create_product() {
+        let service = setup_product_service().await;
+        let result  = service.create_product(Product::default()).await;
+
+        assert!(result.is_ok(), "Error to create product: {:#?}", result);
+
+        let product_id = result.unwrap();
+        println!("Created product with ID: {}", product_id);
     }
 }
