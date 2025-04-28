@@ -172,9 +172,6 @@ impl ProductRepository {
             return Err(sqlx::Error::RowNotFound);
         }
 
-        let query = "DELETE FROM ProductItems WHERE product_id = ?";
-        sqlx::query(query).bind(&id).execute(&self.pool).await?;
-
         Ok(())
     }
 }
