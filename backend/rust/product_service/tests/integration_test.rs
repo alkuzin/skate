@@ -16,7 +16,7 @@
 
 //! Product service integration tests main module.
 
-use product_service::{service::ProductService, config, create_product, create_category, get_product, get_category, update_product, update_category};
+use product_service::{service::ProductService, config, create_product, create_category, get_product, get_category, update_product, update_category, delete_product, delete_category};
 use actix_web::{test, web, App, http::StatusCode};
 use serde_json::json;
 use product_service::product::{Category, Product};
@@ -45,7 +45,7 @@ async fn test_create_product() {
     ).await;
 
     let product = json!({
-        "product_id"  :  0,
+        "product_id"  : 0,
         "category_id" : 1234,
         "name"        : "Cool book",
         "description" : "Cool book 10/10",
@@ -277,4 +277,128 @@ async fn test_update_category() {
 
     println!("Received response: {}", body_string);
     assert_eq!(status, StatusCode::CREATED);
+}
+
+#[actix_web::test]
+async fn test_delete_product() {
+    // Create a test app with the service.
+    let service = setup_product_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/products", web::post().to(create_product))
+            .route("/products/{id}", web::delete().to(delete_product))
+    ).await;
+
+    // Create new product before deleting it.
+    let product = json!({
+        "product_id"  : 0,
+        "category_id" : 1234,
+        "name"        : "Cool book",
+        "description" : "Cool book 10/10",
+        "price"       : 9999,
+        "quantity"    : 1,
+        "image"       : "~/images/cool-book.png",
+    });
+
+    // Send a POST request to the /products endpoint.
+    let req = test::TestRequest::post()
+        .uri("/products")
+        .set_json(&product)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+
+    if let Ok(id) = body_string.trim().parse::<i64>() {
+        println!("Created product with ID: {}", id);
+
+        // Send a DELETE request to the /products/{id} endpoint.
+        let req = test::TestRequest::delete()
+            .uri(format!("/products/{}", id).as_str())
+            .to_request();
+
+        // Call a service.
+        let response = test::call_service(&app, req).await;
+        let status   = response.status();
+
+        // Print the response body.
+        let body_bytes  = test::read_body(response).await;
+        let body_string = String::from_utf8_lossy(&body_bytes);
+
+        println!("Received response: {}", body_string);
+        assert_eq!(status, StatusCode::CREATED);
+    }
+    else {
+        eprintln!("Error to parse product ID");
+    }
+}
+
+#[actix_web::test]
+async fn test_delete_category() {
+    // Create a test app with the service.
+    let service = setup_product_service().await;
+
+    let app = test::init_service(
+        App::new()
+            .app_data(web::Data::new(service))
+            .route("/categories", web::post().to(create_category))
+            .route("/categories/{id}", web::delete().to(delete_category))
+    ).await;
+
+    // Create new product category before deleting it.
+    let category = json!({
+        "category_id" : 0,
+        "name"        : "Books",
+        "image"       : "~/images/category-book.png",
+    });
+
+    // Send a POST request to the /categories endpoint.
+    let req = test::TestRequest::post()
+        .uri("/categories")
+        .set_json(&category)
+        .to_request();
+
+    // Call a service.
+    let response = test::call_service(&app, req).await;
+    let status   = response.status();
+
+    // Print the response body.
+    let body_bytes  = test::read_body(response).await;
+    let body_string = String::from_utf8_lossy(&body_bytes);
+
+    println!("Received response: {}", body_string);
+    assert_eq!(status, StatusCode::CREATED);
+
+    if let Ok(id) = body_string.trim().parse::<i64>() {
+        println!("Created category with ID: {}", id);
+
+        // Send a DELETE request to the /categories/{id} endpoint.
+        let req = test::TestRequest::delete()
+            .uri(format!("/categories/{}", id).as_str())
+            .to_request();
+
+        // Call a service.
+        let response = test::call_service(&app, req).await;
+        let status   = response.status();
+
+        // Print the response body.
+        let body_bytes  = test::read_body(response).await;
+        let body_string = String::from_utf8_lossy(&body_bytes);
+
+        println!("Received response: {}", body_string);
+        assert_eq!(status, StatusCode::CREATED);
+    }
+    else {
+        eprintln!("Error to parse product ID");
+    }
 }
