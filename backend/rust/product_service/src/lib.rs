@@ -135,3 +135,39 @@ pub async fn update_category(service: Data<ProductService>, id: web::Path<i64>,
         Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
+
+/// Delete product info.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `id`      - given product identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn delete_product(service: Data<ProductService>, id: web::Path<i64>)
+    -> impl Responder
+{
+    match service.delete_product(id.into_inner()).await {
+        Ok(_)  => HttpResponse::Created().json("Ok"),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Delete category info.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+/// - `id`      - given product category identifier.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn delete_category(service: Data<ProductService>, id: web::Path<i64>)
+    -> impl Responder
+{
+    match service.delete_category(id.into_inner()).await {
+        Ok(_)  => HttpResponse::Created().json("Ok"),
+        Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
