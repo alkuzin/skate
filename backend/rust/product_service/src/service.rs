@@ -27,6 +27,7 @@ use crate::{
 };
 use std::{fs::File, path::Path};
 use sqlx::SqlitePool;
+use crate::product::Category;
 
 #[derive(Debug, Clone)]
 pub struct ProductService {
@@ -77,6 +78,20 @@ impl ProductService {
         self.product_repository.save(product).await
     }
 
+    /// Create new product category.
+    ///
+    /// # Parameters
+    /// - `category` - given product category info struct.
+    ///
+    /// # Returns
+    /// - Category ID  - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn create_category(&self, category: Category)
+        -> Result<i64, sqlx::Error>
+    {
+        self.category_repository.save(category).await
+    }
+
     /// Get product info.
     ///
     /// # Parameters
@@ -87,6 +102,18 @@ impl ProductService {
     /// - `SQLx error` - otherwise.
     pub async fn get_product(&self, id: i64) -> Result<Product, sqlx::Error> {
         self.product_repository.find_by_id(id).await
+    }
+
+    /// Get product category info.
+    ///
+    /// # Parameters
+    /// - `id` - given product category identifier.
+    ///
+    /// # Returns
+    /// - Product category info - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_category(&self, id: i64) -> Result<Category, sqlx::Error> {
+        self.category_repository.find_by_id(id).await
     }
 
     /// Update product info.
@@ -104,6 +131,21 @@ impl ProductService {
         self.product_repository.update(id, product).await
     }
 
+    /// Update product category info.
+    ///
+    /// # Parameters
+    /// - `id`       - given product category identifier.
+    /// - `category` - given product category info struct.
+    ///
+    /// # Returns
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn update_category(&self, id: i64, category: Category)
+        -> Result<(), sqlx::Error>
+    {
+        self.category_repository.update(id, category).await
+    }
+
     /// Delete product.
     ///
     /// # Parameters
@@ -116,6 +158,18 @@ impl ProductService {
         self.product_repository.delete(id).await
     }
 
+    /// Delete product category.
+    ///
+    /// # Parameters
+    /// - `id` - given product category identifier.
+    ///
+    /// # Returns
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn delete_category(&self, id: i64) -> Result<(), sqlx::Error> {
+        self.category_repository.delete(id).await
+    }
+
     /// Get list of all products.
     ///
     /// # Returns
@@ -123,6 +177,17 @@ impl ProductService {
     /// - `SQLx error` - otherwise.
     pub async fn get_product_list(&self) -> Result<Vec<Product>, sqlx::Error> {
         self.product_repository.get_all_products().await
+    }
+
+    /// Get list of all product categories.
+    ///
+    /// # Returns
+    /// - List of product categories info - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn get_categories_list(&self)
+        -> Result<Vec<Category>, sqlx::Error>
+    {
+        self.category_repository.get_all_categories().await
     }
 }
 
@@ -142,6 +207,8 @@ mod tests {
     async fn test_setup_product_service() {
         let _ = setup_product_service();
     }
+
+    // Tests for product repository related methods.
 
     #[actix_web::test]
     async fn test_create_product() {
@@ -251,4 +318,7 @@ mod tests {
             println!("Product ({}): {:?}", i, product);
         }
     }
+
+    // Tests for category repository related methods.
+    // TODO:
 }
