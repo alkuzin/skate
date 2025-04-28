@@ -16,6 +16,8 @@
 
 //! Product service main struct declaration.
 
+// TODO: handle product category.
+
 use crate::{repository::ProductRepository, product::Product};
 use std::{fs::File, path::Path};
 use sqlx::SqlitePool;
@@ -88,7 +90,7 @@ impl ProductService {
     pub async fn update_product(&self, id: i64, product: Product)
         -> Result<(), sqlx::Error>
     {
-        todo!()
+        self.repository.update(id, product).await
     }
 
     /// Delete product.
