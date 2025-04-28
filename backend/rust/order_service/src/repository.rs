@@ -160,8 +160,8 @@ impl OrderRepository {
     /// - `order` - given order info struct.
     ///
     /// # Returns
-    /// Ok         - in case of success.
-    /// SQLx error - otherwise.
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
     pub async fn update(&self, id: i64, order: Order) -> Result<(), sqlx::Error> {
         let query =
             r#"
@@ -224,7 +224,7 @@ impl OrderRepository {
     /// - `Ok`         - in case of success.
     /// - `SQLx error` - otherwise.
     pub async fn delete(&self, id: i64) -> Result<(), sqlx::Error> {
-        let query  = r#"DELETE FROM Orders WHERE order_id = ?"#;
+        let query  = "DELETE FROM Orders WHERE order_id = ?";
         let result = sqlx::query(query).bind(&id).execute(&self.pool).await?;
 
         // Handle incorrect order ID.
@@ -232,7 +232,7 @@ impl OrderRepository {
             return Err(sqlx::Error::RowNotFound);
         }
 
-        let query = r#"DELETE FROM OrderItems WHERE order_id = ?"#;
+        let query = "DELETE FROM OrderItems WHERE order_id = ?";
         sqlx::query(query).bind(&id).execute(&self.pool).await?;
 
         Ok(())
