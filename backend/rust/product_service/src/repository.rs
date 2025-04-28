@@ -154,4 +154,27 @@ impl ProductRepository {
 
         Ok(())
     }
+
+    /// Delete specific product from database.
+    ///
+    /// # Parameters
+    /// - `id` - given product identifier.
+    ///
+    /// # Returns
+    /// - `Ok`         - in case of success.
+    /// - `SQLx error` - otherwise.
+    pub async fn delete(&self, id: i64) -> Result<(), sqlx::Error> {
+        let query  = "DELETE FROM Products WHERE product_id = ?";
+        let result = sqlx::query(query).bind(&id).execute(&self.pool).await?;
+
+        // Handle incorrect product ID.
+        if result.rows_affected() == 0 {
+            return Err(sqlx::Error::RowNotFound);
+        }
+
+        let query = "DELETE FROM ProductItems WHERE product_id = ?";
+        sqlx::query(query).bind(&id).execute(&self.pool).await?;
+
+        Ok(())
+    }
 }
