@@ -155,4 +155,39 @@ mod tests {
 
         assert!(result.is_err(), "Should return error: {:#?}", result);
     }
+
+    #[actix_web::test]
+    async fn test_update_product_correct() {
+        let service = setup_product_service().await;
+        let product_id = 1;
+
+        // Fill product info.
+        let product = Product {
+            product_id,
+            name: "PC".to_string(),
+            description: "Cool PC 10/10".to_string(),
+            price: 9999,
+            quantity: 42,
+            image: "~/images/cool-pc.png".to_string(),
+        };
+
+        // Try update product info.
+        let result = service.update_product(product_id, product).await;
+        assert!(result.is_ok(), "Error to update product info: {:#?}", result);
+
+        // Try get updated product info.
+        let result = service.get_product(product_id).await;
+        assert!(result.is_ok(), "Error to get product info: {:#?}", result);
+
+        let product = result.unwrap();
+        println!("Updated product info with ID {}: {:#?}", product_id, product);
+    }
+
+    #[actix_web::test]
+    async fn test_update_product_incorrect() {
+        let service = setup_product_service().await;
+        let result  = service.update_product(0, Product::default()).await;
+
+        assert!(result.is_err(), "Should return error");
+    }
 }
