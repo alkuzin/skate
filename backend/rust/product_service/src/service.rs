@@ -131,4 +131,26 @@ mod tests {
         let product_id = result.unwrap();
         println!("Created product with ID: {}", product_id);
     }
+
+    #[actix_web::test]
+    async fn test_get_product_correct() {
+        let service = setup_product_service().await;
+        let result  = service.create_product(Product::default()).await;
+        assert!(result.is_ok(), "Error to create product: {:#?}", result);
+
+        let product_id = result.unwrap();
+        let result     = service.get_product(product_id).await;
+        assert!(result.is_ok(), "Error to get product info: {:#?}", result);
+
+        let product = result.unwrap();
+        println!("Get product info with ID {}: {:#?}", product_id, product);
+    }
+
+    #[actix_web::test]
+    async fn test_get_product_incorrect() {
+        let service = setup_product_service().await;
+        let result  = service.get_product(0).await;
+
+        assert!(result.is_err(), "Should return error: {:#?}", result);
+    }
 }
