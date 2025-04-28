@@ -123,7 +123,6 @@ impl CategoryRepository {
             r#"
             UPDATE Categories
             SET
-                category_id = ?,
                 name = ?,
                 image = ?
             WHERE category_id = ?
@@ -131,7 +130,6 @@ impl CategoryRepository {
 
         // Insert the new category into the database.
         let result = sqlx::query(query)
-            .bind(&category.category_id)
             .bind(&category.name)
             .bind(&category.image)
             .bind(&id)
