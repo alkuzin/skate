@@ -16,15 +16,14 @@
 
 //! Product service main module.
 
-use actix_web::{HttpResponse, Responder, web::{Data, Json}, web};
-use crate::{service::ProductService, product::Product};
-use crate::product::Category;
-
 pub mod category_repository;
 pub mod product_repository;
 pub mod service;
 pub mod product;
 pub mod config;
+
+use crate::{service::ProductService, product::{Product, Category}};
+use actix_web::{HttpResponse, Responder, web::{Data, Json}, web};
 
 /// Create new product.
 ///
@@ -169,5 +168,37 @@ pub async fn delete_category(service: Data<ProductService>, id: web::Path<i64>)
     match service.delete_category(id.into_inner()).await {
         Ok(_)  => HttpResponse::Created().json("Ok"),
         Err(e) => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Get product info list.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn get_product_list(service: Data<ProductService>) -> impl Responder
+{
+    match service.get_product_list().await {
+        Ok(products) => HttpResponse::Created().json(products),
+        Err(e)       => HttpResponse::InternalServerError().body(e.to_string()),
+    }
+}
+
+/// Get product category info list.
+///
+/// # Parameters
+/// - `service` - given product service data wrapper and extractor.
+///
+/// # Returns
+/// - `HttpResponse::Created` - in case of success.
+/// - `HttpResponse::InternalServerError` - otherwise.
+pub async fn get_category_list(service: Data<ProductService>) -> impl Responder
+{
+    match service.get_category_list().await {
+        Ok(products) => HttpResponse::Created().json(products),
+        Err(e)       => HttpResponse::InternalServerError().body(e.to_string()),
     }
 }
