@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Избранное - Skate</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/favorites.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Верхняя панель -->
+    <div class="top-bar">
+        <div class="container">
+            <nav class="top-links">
+                <a href="#">Акции</a>
+                <a href="#">О нас</a>
+                <a href="#">Оплата</a>
+                <a href="#">Доставка и самовывоз</a>
+            </nav>
+            <div class="working-hours">
+                <i class="fas fa-clock"></i> Принимаем заказы с 10:00 до 22:00
+            </div>
+        </div>
+    </div>
+
+    <!-- Основная навигация -->
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <img src="../res/icons/logo.png" alt="Логотип">
+                <span>Skate</span>
+            </div>
+
+            <div class="location-info">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="location-text">
+                    <span class="address">ул. Сиреневая, 26</span>
+                    <span class="phone">
+                        <i class="fas fa-phone-alt"></i>
+                        +7 (999) 345-06-26
+                    </span>
+                </div>
+            </div>
+
+            <div class="user-actions">
+                <a href="favorites.html" class="action-btn">
+                    <i class="far fa-heart"></i>
+                    <span>Избранное</span>
+                    <div class="favorites-count"></div>
+                </a>
+                <a href="orders.html" class="action-btn">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Заказы</span>
+                </a>
+                <div class="user-profile">
+                    <i class="far fa-user"></i>
+                    <span>Гость</span>
+                </div>
+                <a href="cart.html" class="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-total">0 руб</span>
+                    <div class="cart-count" style="display: none;"></div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main class="favorites-main">
+        <div class="container">
+            <div class="favorites-header">
+                <h1>Избранные товары</h1>
+                <button class="btn clear-favorites-btn" onclick="clearFavorites()">
+                    Очистить избранное
+                </button>
+            </div>
+            
+            <div class="favorites-items">
+               
+            </div>
+            
+            <div class="empty-favorites">
+                <i class="far fa-heart"></i>
+                <p>В избранном пока ничего нет</p>
+                <a href="index.html" class="btn">Перейти в меню</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>© 2025 Служба курьерской доставки. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно товара -->
+    <div class="product-modal" id="productModal">
+        <div class="product-modal-content">
+            <button class="product-modal-close" onclick="closeProductModal()">&times;</button>
+            <div class="product-modal-body" id="productModalBody">
+               
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/favorites.js"></script>
+</body>
+</html>

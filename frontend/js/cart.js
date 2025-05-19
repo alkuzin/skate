@@ -40,7 +40,7 @@ function renderCartPage() {
     totalPriceElement.textContent = `${cart.total} руб`;
 }
 
-// Получение названия категории
+// Название категории
 function getCategoryName(categoryId) {
     const categories = {
         'sets': 'Сеты',
@@ -62,7 +62,7 @@ function changeQuantity(productId, change) {
     
     item.quantity += change;
     
-    // Если количество стало 0 или меньше, товар удаляется
+    // Если количество стало 0 или меньше, то товар удаляется
     if (item.quantity <= 0) {
         removeFromCart(productId);
         return;
@@ -72,7 +72,6 @@ function changeQuantity(productId, change) {
     cart.total = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     cart.count = cart.items.reduce((count, item) => count + item.quantity, 0);
 
-    // Сохранение
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartUI();
     renderCartPage();
@@ -86,13 +85,11 @@ function removeFromCart(productId) {
     cart.total = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     cart.count = cart.items.reduce((count, item) => count + item.quantity, 0);
     
-    // Сохранение
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartUI();
     renderCartPage();
 }
 
-// Инициализация страницы корзины
 document.addEventListener('DOMContentLoaded', () => {
     initCart();
     renderCartPage();

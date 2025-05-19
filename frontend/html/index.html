@@ -6,6 +6,7 @@
     <title>Доставка еды</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Верхняя панель -->
@@ -45,6 +46,7 @@
                 <a href="favorites.html" class="action-btn">
                     <i class="far fa-heart"></i>
                     <span>Избранное</span>
+                    <div class="favorites-count" style="display: none;"></div>
                 </a>
                 <a href="orders.html" class="action-btn">
                     <i class="fas fa-clipboard-list"></i>
@@ -179,6 +181,9 @@
                 <h2 class="category-title">Сеты</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('set1')">
+                        <button class="favorite-btn" data-product-id="set1" onclick="toggleFavorite('set1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/set1.jpg" alt="Сет 1">
                         <div class="product-info">
                             <h3>Сет "Домашний"</h3>
@@ -190,6 +195,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('set2')">
+                        <button class="favorite-btn" data-product-id="set2" onclick="toggleFavorite('set2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/set2.jpg" alt="Сет 2">
                         <div class="product-info">
                             <h3>Сет "Горячий"</h3>
@@ -201,6 +209,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('set3')">
+                        <button class="favorite-btn" data-product-id="set3" onclick="toggleFavorite('set3', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/set3.jpg" alt="Сет 3">
                         <div class="product-info">
                             <h3>Сет "Мини гриль"</h3>
@@ -212,6 +223,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('set4')">
+                        <button class="favorite-btn" data-product-id="set4" onclick="toggleFavorite('set4', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/set4.jpg" alt="Сет 4">
                         <div class="product-info">
                             <h3>Сет "СамСам"</h3>
@@ -223,6 +237,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('set5')">
+                        <button class="favorite-btn" data-product-id="set5" onclick="toggleFavorite('set5', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/set5.jpg" alt="Сет 5">
                         <div class="product-info">
                             <h3>Сет "Мега"</h3>
@@ -241,6 +258,9 @@
                 <h2 class="category-title">Холодные роллы</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('roll1')">
+                        <button class="favorite-btn" data-product-id="roll1" onclick="toggleFavorite('roll1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/roll1.jpg" alt="Ролл с Авокадо">
                         <div class="product-info">
                             <h3>Ролл с Авокадо</h3>
@@ -252,6 +272,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('roll2')">
+                        <button class="favorite-btn" data-product-id="roll2" onclick="toggleFavorite('roll2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/roll2.jpg" alt="Ролл с Огурцом">
                         <div class="product-info">
                             <h3>Ролл с Огурцом</h3>
@@ -263,6 +286,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('roll3')">
+                        <button class="favorite-btn" data-product-id="roll3" onclick="toggleFavorite('roll3', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/roll3.jpg" alt="Ролл с Лососем">
                         <div class="product-info">
                             <h3>Ролл с Лососем</h3>
@@ -274,6 +300,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('roll4')">
+                        <button class="favorite-btn" data-product-id="roll4" onclick="toggleFavorite('roll4', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/roll4.jpg" alt="Ролл с Тунцом">
                         <div class="product-info">
                             <h3>Ролл с Тунцом</h3>
@@ -285,6 +314,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('roll5')">
+                        <button class="favorite-btn" data-product-id="roll5" onclick="toggleFavorite('roll5', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <img src="../res/images/roll5.jpg" alt="Ролл с Креветкой">
                         <div class="product-info">
                             <h3>Ролл с Креветкой</h3>
@@ -303,6 +335,9 @@
                 <h2 class="category-title">Горячие роллы</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('hot-roll1')">
+                        <button class="favorite-btn" data-product-id="hot-roll1" onclick="toggleFavorite('hot-roll1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll1.jpg" alt="Ролл Ацуй">
                         </div>
@@ -316,6 +351,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('hot-roll2')">
+                        <button class="favorite-btn" data-product-id="hot-roll2" onclick="toggleFavorite('hot-roll2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll2.jpg" alt="Ролл Темпура с лососем">
                         </div>
@@ -329,6 +367,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('hot-roll3')">
+                        <button class="favorite-btn" data-product-id="hot-roll3" onclick="toggleFavorite('hot-roll3', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll3.jpg" alt="Ролл Кунашир">
                         </div>
@@ -342,6 +383,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('hot-roll4')">
+                        <button class="favorite-btn" data-product-id="hot-roll4" onclick="toggleFavorite('hot-roll4', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll4.jpg" alt="Ролл Темпура краш">
                         </div>
@@ -355,6 +399,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('hot-roll5')">
+                        <button class="favorite-btn" data-product-id="hot-roll5" onclick="toggleFavorite('hot-roll5', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot-roll5.jpg" alt="Ролл Горячий цезарь">
                         </div>
@@ -375,6 +422,9 @@
                 <h2 class="category-title">Пицца</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('pizza1')">
+                        <button class="favorite-btn" data-product-id="pizza1" onclick="toggleFavorite('pizza1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza1.jpg" alt="Пицца Маргарита">
                         </div>
@@ -388,6 +438,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('pizza2')">
+                        <button class="favorite-btn" data-product-id="pizza2" onclick="toggleFavorite('pizza2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza2.jpg" alt="Пицца Пепперони">
                         </div>
@@ -401,6 +454,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('pizza3')">
+                        <button class="favorite-btn" data-product-id="pizza3" onclick="toggleFavorite('pizza3', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza3.jpg" alt="Пицца Карбонара">
                         </div>
@@ -414,6 +470,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('pizza4')">
+                        <button class="favorite-btn" data-product-id="pizza4" onclick="toggleFavorite('pizza4', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza4.jpg" alt="Пицца Песто">
                         </div>
@@ -427,6 +486,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('pizza5')">
+                        <button class="favorite-btn" data-product-id="pizza5" onclick="toggleFavorite('pizza5', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/pizza5.jpg" alt="Пицца Сырный цыпленок">
                         </div>
@@ -447,6 +509,9 @@
                 <h2 class="category-title">Поке</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('poke1')">
+                        <button class="favorite-btn" data-product-id="poke1" onclick="toggleFavorite('poke1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/poke1.jpg" alt="Поке с тигровыми креветками и битыми огурцами">
                         </div>
@@ -460,6 +525,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('poke2')">
+                        <button class="favorite-btn" data-product-id="poke2" onclick="toggleFavorite('poke2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/poke2.jpg" alt="Поке с тигровыми креветками и командорским кальмаром">
                         </div>
@@ -480,6 +548,9 @@
                 <h2 class="category-title">Горячее</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('hot1')">
+                        <button class="favorite-btn" data-product-id="hot1" onclick="toggleFavorite('hot1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot1.jpg" alt="Торидон">
                         </div>
@@ -493,6 +564,9 @@
                         </div>
                     </div>
                      <div class="product-card" onclick="openProductModal('hot2')">
+                         <button class="favorite-btn" data-product-id="hot2" onclick="toggleFavorite('hot2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot2.jpg" alt="Гёдза с креветкой 6 шт.">
                         </div>
@@ -506,6 +580,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('hot3')">
+                         <button class="favorite-btn" data-product-id="hot3" onclick="toggleFavorite('hot3', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/hot3.jpg" alt="Томагояки">
                         </div>
@@ -526,6 +603,9 @@
                 <h2 class="category-title">Десерт</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('dessert1')">
+                        <button class="favorite-btn" data-product-id="dessert1" onclick="toggleFavorite('dessert1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/dessert1.jpg" alt="Чизкейк Нью-Йорк">
                         </div>
@@ -539,6 +619,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('dessert2')">
+                        <button class="favorite-btn" data-product-id="dessert2" onclick="toggleFavorite('dessert2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/dessert2.jpg" alt="Карамельный чизкейк">
                         </div>
@@ -559,6 +642,9 @@
                 <h2 class="category-title">Напитки</h2>
                 <div class="product-grid">
                     <div class="product-card" onclick="openProductModal('drink1')">
+                        <button class="favorite-btn" data-product-id="drink1" onclick="toggleFavorite('drink1', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink1.jpg" alt="Сок Rich Вишня">
                         </div>
@@ -572,6 +658,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('drink2')">
+                        <button class="favorite-btn" data-product-id="drink2" onclick="toggleFavorite('drink2', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink2.jpg" alt="Сок Rich Персик">
                         </div>
@@ -585,6 +674,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('drink3')">
+                        <button class="favorite-btn" data-product-id="drink3" onclick="toggleFavorite('drink3', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink3.jpg" alt="Сок Rich Яблоко">
                         </div>
@@ -598,6 +690,9 @@
                         </div>
                     </div>
                     <div class="product-card" onclick="openProductModal('drink4')">
+                        <button class="favorite-btn" data-product-id="drink4" onclick="toggleFavorite('drink4', event)">
+                            <i class="far fa-heart"></i>
+                        </button>
                         <div class="product-image-wrapper">
                             <img src="../res/images/drink4.jpg" alt="Сок Rich Апельсин">
                         </div>
@@ -619,6 +714,8 @@
         </div>
     </main>
 
+
+    
     <footer class="main-footer">
         <div class="container">
             <p>© 2025 Служба курьерской доставки. Все права защищены.</p>
@@ -626,7 +723,19 @@
     </footer>
 
     <script src="../js/main.js"></script>
+    <script src="../js/favorites.js"></script>
 
+    <section class="catalog">
+        <div class="container">
+            <div class="category-filter">
+              
+            </div>
+            <div class="product-grid" id="catalog">
+                
+            </div>
+        </div>
+    </section>
+    
     <!-- Модальное окно товара -->
      <div class="product-modal" id="productModal">
         <div class="product-modal-content">

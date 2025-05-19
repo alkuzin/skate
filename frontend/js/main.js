@@ -281,7 +281,6 @@ const productsDB = {
     
 };
 
-// Инициализация корзины
 function initCart() {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
@@ -289,6 +288,31 @@ function initCart() {
         updateCartUI();
     }
 }
+
+// Проверка авторизации при загрузке страницы
+document.addEventListener('DOMContentLoaded', function () {
+    updateUserNavigation();
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (currentUser) {
+        const userProfileElements = document.querySelectorAll('.user-profile');
+        userProfileElements.forEach(el => {
+            el.innerHTML = `
+                <i class="far fa-user"></i>
+                <span>${currentUser.name}</span>
+            `;
+            el.onclick = function() {
+                window.location.href = 'profile.html';
+            };
+        });
+    }
+    
+    initCart();
+    initFavorites();
+    initFixedCategories();
+    initScrollButtons();
+    window.addEventListener('scroll', handleScroll);
+});
 
 // Добавление товара в корзину
 function addToCart(productId, event) {
@@ -365,7 +389,7 @@ function filterByCategory(categoryId) {
     }
 }
 
-// Инициализация фиксированной панели категорий
+// Фиксированная панель категорий
 function initFixedCategories() {
     const originalCategories = document.querySelector('.categories-section .categories-container');
     const fixedCategories = document.querySelector('.fixed-categories .categories-container');
@@ -403,7 +427,6 @@ function handleScroll() {
     }
 }
 
-// Инициализация скролла категорий
 function initScrollButtons() {
     document.querySelectorAll('.categories-container').forEach(container => {
         const leftBtn = container.parentElement.querySelector('.left-scroll');
@@ -423,7 +446,6 @@ function initScrollButtons() {
     });
 }
 
-// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     initCart();
     initFixedCategories();
@@ -450,19 +472,23 @@ function openProductModal(productId) {
     const modal = document.getElementById('productModal');
     const modalBody = document.getElementById('productModalBody');
     
-    // Проверка того, есть ли описание
-    const description = product.description || 'Описание данного товара отсутствует.';
-
+    const isFavorite = favorites.items.includes(productId);
+    
     modalBody.innerHTML = `
         <div class="product-modal-image">
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${product.image}" alt="${product.name}" style="max-height: 300px; object-fit: contain;">
         </div>
         <div class="product-modal-info">
             <h2 class="product-modal-title">${product.name}</h2>
-            <p class="product-modal-description">${description}</p>
+            <p class="product-modal-description">${product.description || 'Описание отсутствует'}</p>
             <div class="product-modal-price">${product.price} руб</div>
-            <div class="product-modal-add">
-                <button class="btn" onclick="addToCart('${productId}', event); event.stopPropagation();">Добавить в корзину</button>
+            <div class="product-modal-actions">
+                <button class="btn" onclick="addToCart('${productId}', event); event.stopPropagation()">
+                    Добавить в корзину
+                </button>
+                <button class="favorite-btn-modal" onclick="toggleFavorite('${productId}', event); event.stopPropagation()">
+                    <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+                </button>
             </div>
         </div>
     `;
@@ -483,5 +509,140 @@ window.onclick = function(event) {
     const modal = document.getElementById('productModal');
     if (event.target === modal) {
         closeProductModal();
+    }
+}
+
+// Избранное
+let favorites = {
+    items: []
+};
+
+function initFavorites() {
+    const savedFavorites = localStorage.getItem('favorites');
+    if (savedFavorites) {
+        favorites = JSON.parse(savedFavorites);
+    } else {
+        favorites = { items: [] };
+    }
+    updateFavoritesUI();
+}
+
+// Функция добавления/удаления товара из избранного
+function toggleFavorite(productId, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    
+    const index = favorites.items.findIndex(item => item === productId);
+    
+    if (index === -1) {
+        favorites.items.push(productId);
+    } else {
+        favorites.items.splice(index, 1);
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateFavoritesUI();
+    
+    // Обновление иконки на главной странице
+    const favoriteBtns = document.querySelectorAll(`.favorite-btn[data-product-id="${productId}"]`);
+    favoriteBtns.forEach(btn => {
+        btn.innerHTML = favorites.items.includes(productId) ? 
+            '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+    });
+    
+    // Обновление иконки в модальном окне
+    const modalFavoriteBtn = document.querySelector('.favorite-btn-modal');
+    if (modalFavoriteBtn && modalFavoriteBtn.dataset.productId === productId) {
+        modalFavoriteBtn.innerHTML = favorites.items.includes(productId) ? 
+            '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+    }
+    
+    // Уведомление
+    const product = productsDB[productId];
+    if (product) {
+        showNotification(favorites.items.includes(productId) ? 
+            `"${product.name}" добавлен в избранное` : 
+            `"${product.name}" удален из избранного`);
+    }
+}
+
+function updateFavoritesUI() {
+    // Обновление счетчика в шапке
+    const favoritesCount = document.querySelector('.favorites-count');
+    if (favoritesCount) {
+        favoritesCount.textContent = favorites.items.length;
+        favoritesCount.style.display = favorites.items.length > 0 ? 'flex' : 'none';
+    }
+    
+    // Обновление иконки на карточках товаров
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        const productId = btn.dataset.productId;
+        btn.innerHTML = favorites.items.includes(productId) ? 
+            '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initCart();
+    initFavorites();
+});
+
+document.querySelector('.user-profile').addEventListener('click', function() {
+    const user = getCurrentUser();
+    if (user) {
+        window.location.href = 'profile.html';
+    } else {
+        window.location.href = 'auth.html';
+    }
+});
+
+function loadCatalog() {
+    fetch('/api/products')
+        .then(response => response.json())
+        .then(products => {
+            const catalog = document.getElementById('catalog');
+            products.forEach(product => {
+                catalog.innerHTML += `
+                    <div class="product-card" data-id="${product.id}">
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>${product.price} руб.</p>
+                        <button class="add-to-cart" data-id="${product.id}">
+                            В корзину
+                        </button>
+                    </div>
+                `;
+            });
+        });
+}
+
+// Хранение данных пользователя
+let currentUser = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    loadCart();
+    loadCatalog();
+});
+
+// Проверка авторизации
+function checkAuth() {
+    const user = localStorage.getItem('currentUser');
+    if (user) {
+        currentUser = JSON.parse(user);
+        updateAuthUI();
+    }
+}
+
+function updateAuthUI() {
+    if (currentUser) {
+        document.querySelectorAll('.auth-only').forEach(el => {
+            el.style.display = 'block';
+        });
+        document.querySelectorAll('.guest-only').forEach(el => {
+            el.style.display = 'none';
+        });
     }
 }

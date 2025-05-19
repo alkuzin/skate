@@ -1,0 +1,146 @@
+.favorites-main {
+    padding: 30px 0;
+    min-height: 80vh;
+}
+
+.favorites-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.clear-favorites-btn {
+    background-color: #fd8a43;
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    order: 1;
+}
+
+.clear-favorites-btn:hover {
+    background-color: #ff6600;
+}
+
+.favorites-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Карточки */
+.favorite-item {
+    position: relative;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s;
+}
+
+.favorite-item:hover {
+    transform: translateY(-5px);
+}
+
+.favorite-item-img-container {
+    padding: 15px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+    padding: 15px;
+    position: relative;
+}
+
+.favorite-item[data-category="pizza"] .favorite-item-img-container,
+.favorite-item[data-category="drinks"] .favorite-item-img-container {
+    height: 200px; 
+    padding: 10px;
+}
+
+.favorite-item-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.favorite-item[data-category="pizza"] .favorite-item-img {
+    max-width: 90%;
+}
+
+.favorite-item[data-category="drinks"] .favorite-item-img {
+    max-width: 60%;
+    max-height: 90%;
+}
+
+/* Информация о товаре */
+.favorite-item .product-info {
+    padding: 15px;
+    border-top: 1px solid #f0f0f0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.favorite-item .product-info h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.favorite-item .description {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+/* Кнопка удаления */
+.favorite-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ff4444;
+    font-size: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+/* Модальное окно */
+.product-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.favorite-btn-modal {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #ff4444;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}

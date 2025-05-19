@@ -265,7 +265,7 @@ body {
     border-bottom: 2px solid var(--primary-color);
 }
 
-/* верхняя панель */
+/* Верхняя панель */
 .fixed-categories .category-img-wrapper {
     width: 40px;
     height: 40px;
@@ -277,7 +277,7 @@ body {
     transition: transform 0.3s;
     overflow: hidden;
     border: 5px solid #fff; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* тень */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     
 }
 
@@ -329,7 +329,7 @@ body {
     color: var(--dark-color);
 }
 
-/* изображения основых категорий */
+/* Изображения основых категорий */
 .category-img-wrapper {
     width: 80px;
     height: 80px;
@@ -553,7 +553,7 @@ body {
     transition: transform 0.3s;
 }
 
-/* для категории Сеты */
+/* Для категории Сеты */
 #sets .product-card img {
     height: 260px; 
     object-fit: contain; 
@@ -595,7 +595,7 @@ body {
     object-fit: contain;
 }
 
-/* анимация для товаров */
+/* Анимация для товаров */
 .product-card:hover img {
     transform: scale(1.05);
 }
@@ -778,7 +778,7 @@ body {
     text-decoration: underline;
 }
 
-/* Стили для меню с категориями */
+/* Для меню с категориями */
 .menu-section {
     padding: 20px 0 40px;
 }
@@ -817,7 +817,7 @@ body {
 }
 
 .fixed-categories.visible {
-    top: 120px; /* под основной шапкой */
+    top: 120px;
     opacity: 1;
 }
 
@@ -889,7 +889,7 @@ body {
     white-space: nowrap;
 }
 
-/* адаптация для мобильных устройств*/
+/* Адаптация для мобильных устройств*/
 @media (max-width: 768px) {
     .fixed-categories.visible {
         top: 140px;
@@ -928,13 +928,11 @@ body {
     }
 }
 
-
-/* Плавный скролл */
 html {
     scroll-behavior: smooth;
 }
 
-/* Стили для уведомлений */
+/* Для уведомлений */
 .notification {
     position: fixed;
     bottom: 20px;
@@ -998,7 +996,7 @@ html {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* Стили для модального окна товара */
+/* Модальное окно товара */
 .product-modal {
     display: none;
     position: fixed;
@@ -1098,4 +1096,128 @@ html {
     .product-modal-image {
         min-width: auto;
     }
+}
+
+/* Кнопка избранного */
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--primary-color);
+    cursor: pointer;
+    z-index: 2;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.9); 
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1; 
+    transition: all 0.2s;
+}
+
+.favorite-btn i.fas {
+    color: #ff4444;
+}
+
+/* Счетчик избранного */
+.action-btn {
+    position: relative;
+}
+
+.favorites-count {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    display: none;
+}
+
+.product-modal-actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.product-modal-actions .favorite-btn {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #ff4444;
+}
+
+.product-modal-actions .favorite-btn:hover {
+    background-color: #f8f8f8;
+}
+
+.product-modal-actions .favorite-btn i {
+    font-size: 18px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.user-actions {
+    font-family: 'Times New Roman', serif;
+}
+
+.action-btn span, 
+.user-profile span, 
+.cart-btn span {
+    font-family: 'Menlo', monospace;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .action-btn span, 
+    .user-profile span, 
+    .cart-btn span {
+        font-size: 12px;
+    }
+}
+
+.user-profile {
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-profile:hover {
+    color: var(--primary-color);
+}
+
+.user-profile i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.user-profile span {
+    font-size: 12px;
+    font-family: 'Roboto', sans-serif;
 }
