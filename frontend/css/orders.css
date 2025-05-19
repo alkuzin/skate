@@ -1,0 +1,64 @@
+.orders-main {
+    padding: 30px 0;
+    min-height: calc(120vh - 300px);
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-items {
+    margin-bottom: 15px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.order-total {
+    font-weight: bold;
+    text-align: right;
+    font-size: 18px;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.status.в\ обработке {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status.выполнен {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.отменен {
+    background-color: #f8d7da;
+    color: #721c24;
+}
