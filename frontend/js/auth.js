@@ -224,3 +224,15 @@ function showAlert(message, type) {
         setTimeout(() => alertDiv.remove(), 5000);
     }
 }
+
+// После успешной авторизации/регистрации
+function afterAuthSuccess(user) {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    // Обновление статуса на всех страницах
+    if (window.opener) {
+        window.opener.updateUserStatus();
+    }
+    
+    window.location.href = 'profile.html';
+}

@@ -289,9 +289,85 @@ function initCart() {
     }
 }
 
+document.getElementById('userProfile').addEventListener('click', function() {
+    // Проверка авторизации
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (currentUser) {
+        // Если пользователь авторизован - переход в профиль
+        window.location.href = 'profile.html';
+    } else {
+        // Если не авторизован - переход на страницу авторизации
+        window.location.href = 'auth.html';
+    }
+});
+
+// Функция обновления статуса пользователя
+function updateUserStatus() {
+    const userProfile = document.getElementById('userProfile');
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (currentUser) {
+        userProfile.innerHTML = `
+            <i class="far fa-user"></i>
+            <span>${currentUser.name}</span>
+        `;
+        userProfile.style.cursor = 'pointer';
+    } else {
+        userProfile.innerHTML = `
+            <i class="far fa-user"></i>
+            <span>Гость</span>
+        `;
+        userProfile.style.cursor = 'pointer';
+    }
+}
+
+// Обработчик кнопки "Заказы"
+document.getElementById('ordersBtn').addEventListener('click', function() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (currentUser) {
+        // Если пользователь авторизован - переход в заказы
+        window.location.href = 'orders.html';
+    } else {
+        // Если не авторизован - показываем сообщение
+        showAuthNotification();
+    }
+});
+
+// Показ уведомления о необходимости авторизации
+function showAuthNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'notification show';
+    notification.innerHTML = `
+        <span>Для просмотра заказов необходимо войти в аккаунт</span>
+        <a href="auth.html">Войти</a>
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Обновление статуса кнопки заказов
+function updateOrdersButton() {
+    const ordersBtn = document.getElementById('ordersBtn');
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (currentUser) {
+        ordersBtn.style.display = 'flex'; // Показываем для авторизованных
+    } else {
+        ordersBtn.style.display = 'none'; // Скрываем для гостей
+    }
+}
+
 // Проверка авторизации при загрузке страницы
 document.addEventListener('DOMContentLoaded', function () {
     updateUserNavigation();
+    updateUserStatus();
+    updateOrdersButton();
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     
     if (currentUser) {
@@ -646,3 +722,4 @@ function updateAuthUI() {
         });
     }
 }
+

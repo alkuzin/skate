@@ -33,3 +33,8 @@ function logout() {
     localStorage.removeItem('currentUser');
     window.location.href = 'login.html';
 }
+
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
+});
