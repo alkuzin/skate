@@ -705,10 +705,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Проверка авторизации
 function checkAuth() {
-    const user = localStorage.getItem('currentUser');
-    if (user) {
-        currentUser = JSON.parse(user);
-        updateAuthUI();
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userProfile = document.getElementById('userProfile');
+    
+    if (currentUser) {
+        userProfile.innerHTML = `
+            <i class="far fa-user"></i>
+            <span>${currentUser.name}</span>
+        `;
     }
 }
 
