@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skate - Личный кабинет</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+<body>
+    <!-- Верхняя панель -->
+    <div class="top-bar">
+        <div class="container">
+            <nav class="top-links">
+                <a href="#">Акции</a>
+                <a href="#">О нас</a>
+                <a href="#">Оплата</a>
+                <a href="#">Доставка и самовывоз</a>
+            </nav>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <img src="../res/icons/logo.png" alt="Логотип">
+                <span>Skate</span>
+            </div>
+            <a href="index.html" class="btn">На главную</a>
+        </div>
+    </header>
+
+    <main class="profile-main">
+        <div class="container">
+            <h1>Личный кабинет</h1>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="name">Имя:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Телефон:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Адрес:</label>
+                    <input type="text" id="address" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-save">Сохранить</button>
+                    <button type="button" class="btn btn-logout" id="logoutBtn">Выйти</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>© 2025 Служба курьерской доставки. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="../js/profile.js"></script>
+</body>
+</html>
