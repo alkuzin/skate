@@ -17,7 +17,7 @@
 //! Service configuration data.
 
 /// Service bind address.
-pub const BIND_ADDRESS: &str = "127.0.0.1:4000";
+pub const BIND_ADDRESS: &str = "127.0.0.1:8082";
 
 /// Service SQLite database path.
 pub const DATABASE_PATH: &str = "../db/products.db";
